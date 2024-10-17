@@ -1,13 +1,37 @@
 services:
+  frnotend:
+    build: task_app_front
+    container_name: task-app-front
+    ports:
+      - 80:80
+      - 443:443
+
+  backend:
+    build: task_app_back
+    container_name: task-app-back
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+    environment:
+      - PGSQL_HOST=postgres
+      - PGSQL_USER=${PGSQL_USER}
+      - PGSQL_PORT=${PGSQL_PORT}
+      - PGSQL_NAME=${PGSQL_NAME}
+      - PGSQL_PASS=${PGSQL_PASS}
+
   db:
     image: postgres:14
     container_name: postgres
-    ports:
-      - 5432:5432
+    # ports:
+    #   - 5432:5432
     volumes:
-      - db_store:/var/lib/postgresql/data
+      - ./postgresql/db_store:/var/lib/postgresql/data
+      - ./postgresql/init:/docker-entrypoint-initdb.d
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
-volumes:
-  db_store:
+      - POSTGRES_USER=${PGSQL_USER}
+      - POSTGRES_PASSWORD=${PGSQL_PASS}
+      - POSTGRES_DB=${PGSQL_NAME}
+
+# volumes:
+#   db_store:

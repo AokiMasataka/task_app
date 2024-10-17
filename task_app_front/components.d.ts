@@ -7,9 +7,10 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    AddTask: typeof import('./src/components/AddTask.vue')['default']
-    HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
-    Navi: typeof import('./src/components/Navi.vue')['default']
-    Tasks: typeof import('./src/components/Tasks.vue')['default']
+    AddTaskBtn: typeof import('./src/components/common/AddTaskBtn.vue')['default']
+    Navi: typeof import('./src/components/templates/Navi.vue')['default']
+    TaskForm: typeof import('./src/components/common/TaskForm.vue')['default']
+    Tasks: typeof import('./src/components/templates/Tasks.vue')['default']
+    TasksView: typeof import('./src/components/pages/TasksView.vue')['default']
   }
 }

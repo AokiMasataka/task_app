@@ -12,6 +12,7 @@ app = APIRouter()
 class CreateRequest(BaseModel):
     title: str
     content: str
+    status: int
 
 
 class GetTasksRequest(BaseModel):
@@ -22,7 +23,8 @@ class GetTasksRequest(BaseModel):
 def create_task(create_request: CreateRequest):
     t = task.create(
         title=create_request.title,
-        content=create_request.content
+        content=create_request.content,
+        status=create_request.status
     )
 
     task_id = str(t.uuid)
@@ -31,15 +33,10 @@ def create_task(create_request: CreateRequest):
 
 
 @app.get("/task", status_code=200)
-def get_tasks(get_tasks_request: GetTasksRequest = None):
-    if get_tasks_request is not None:
-        tasks = [
-            task.json(inclede_content=False) for task in task.get_with_status(
-                status=get_tasks_request.status
-            )
-        ]
-    else:
-        tasks = [task.json(inclede_content=False) for task in task.get_all()]
+def get_tasks(status: int = 0):
+    tasks = task.get_with_status(
+        status=status
+    )
     logger.info(msg=f"get all tasks: number of tasks: {len(tasks)}")
     return {"tasks": tasks}
 
@@ -47,8 +44,8 @@ def get_tasks(get_tasks_request: GetTasksRequest = None):
 @app.get("/task/{task_id}", status_code=200)
 def get_task(task_id):
     t = task.get(task_id=task_id)
-    logger.info(msg=f"get task: task_ID: {task_id} title: {t.title}")
-    return t.json()
+    logger.info(msg=f"get task: task_ID: {task_id} title: {t['title']}")
+    return t
 
 
 @app.put("/task/{task_id}", status_code=200)
@@ -56,7 +53,8 @@ def update_task(task_id, create_request: CreateRequest):
     task.update(
         task_id=task_id,
         title=create_request.title,
-        content=create_request.content
+        content=create_request.content,
+        status=create_request.status
     )
 
 
