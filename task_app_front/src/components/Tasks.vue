@@ -1,5 +1,7 @@
 <template>
     <div class="tasks">
+        <div class="content">
+            <h2>TODO</h2>
             <v-card
                 class="task"
                 v-for="task in state.tasks"
@@ -9,7 +11,8 @@
                 variant="tonal"
                 @click="fetchTask(task.id)">
             </v-card>
-        <AddTask></AddTask>
+            <AddTask></AddTask>
+        </div>
     </div>
 
     <v-dialog v-model="isActivate" max-width="600">
@@ -70,7 +73,9 @@ async function fetchTasks() {
 }
 
 async function fetchTask(task_id: string) {
+    console.log(task_id);
     const task = await fetchTaskAPI(task_id);
+    console.log(task);
     taskData.title = task.title;
     taskData.content = task.content;
     taskData.id = task.id;
@@ -99,6 +104,12 @@ onMounted(fetchTasks)
 <style scoped>
 .tasks {
     margin: 0px 64px 0px 64px;
+    background-color: rgb(76, 76, 76);
+}
+
+.content {
+    width: fit-content;
+    margin: auto;
 }
 
 .task {
