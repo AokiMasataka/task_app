@@ -1,73 +1,46 @@
-import os
-import json
+import datetime
+
+from .model import (
+    Task,
+    get_tasks,
+    get_tasks_with_status,
+    get_task,
+    create_task,
+    update_task,
+    delete_task
+)
 
 
-TASK_DIR = "./tasks"
+def create(title: str, content: str) -> Task:
+    task = Task(title=title, content=content)
+    create_task(task=task)
+
+    return task
 
 
-class Task:
-    def __init__(self, title: str, content: str, uuid: str = None) -> None:
-        self._title = title
-        self._content = content
-        self._uuid = uuid
-    
-    @property
-    def title(self) -> str: 
-        return self._title
-    
-    @property
-    def content(self) -> str: 
-        return self._content
+def get_all() -> list[dict]:
+    tasks = get_tasks()
+    return tasks
 
-    @property
-    def id(self) -> str:
-        return self._uuid
-    
-    def json(self, inclede_content: bool = True) -> dict:
-        response = {
-            "title": self._title,
-            "id": self._uuid
-        }
-
-        if inclede_content:
-            response["content"] = self._content
-
-        return response
-    
-    def from_json(item, uuid: str = None) -> "Task":
-        return Task(title=item["title"], content=item["content"], uuid=uuid)
-
-
-def create(task_id: str, title: str, content: str) -> None:
-    task_path = os.path.join(TASK_DIR, task_id)
-    
-    with open(file=task_path, mode="w") as f:
-        json.dump(obj={"title": title, "content": content}, fp=f)
-
-
-def get_all() -> list[Task]:
-    task_ids = os.listdir(TASK_DIR)
-    results = []
-    for task_id in task_ids:
-        task_path = os.path.join(TASK_DIR, task_id)
-        with open(file=task_path, mode="r") as f:
-            task_json = json.load(fp=f)
-            results.append(Task.from_json(item=task_json, uuid=task_id))
-    return results
-
+def get_with_status(status=1) -> list[dict]:
+    tasks = get_tasks_with_status(status=status)
+    return tasks
 
 def get(task_id: str) -> Task:
-    task_path = os.path.join(TASK_DIR, task_id)
-
-    with open(file=task_path, mode="r") as f:
-        task = json.load(fp=f)
-    return Task.from_json(item=task, uuid=task_id)
+    task = get_task(uuid=task_id)
+    return task
 
 
 def update(task_id: str, title: str, content: str):
-    create(task_id=task_id, title=title, content=content)
+    task = Task(
+        title=title,
+        content=content,
+        uuid=task_id,
+        updated_at=datetime.datetime.now()
+    )
+    update_task(task=task)
 
 
 def delete(task_id: str) -> None:
-    task_path = os.path.join(TASK_DIR, task_id)
-    os.remove(task_path)
+    delete_task(uuid=task_id)
+

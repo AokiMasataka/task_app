@@ -1,5 +1,4 @@
 from logging import getLogger
-import uuid
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
@@ -15,21 +14,32 @@ class CreateRequest(BaseModel):
     content: str
 
 
+class GetTasksRequest(BaseModel):
+    status: int
+
+
 @app.post("/task", status_code=201)
 def create_task(create_request: CreateRequest):
-    task_id = str(uuid.uuid4())
-    task.create(
-        task_id=task_id,
+    t = task.create(
         title=create_request.title,
         content=create_request.content
     )
+
+    task_id = str(t.uuid)
     logger.info(msg=f"task created! task_ID: {task_id}")
     return JSONResponse(content={"task_id": task_id})
 
 
 @app.get("/task", status_code=200)
-def get_all():
-    tasks = [task.json(inclede_content=False) for task in task.get_all()]
+def get_tasks(get_tasks_request: GetTasksRequest = None):
+    if get_tasks_request is not None:
+        tasks = [
+            task.json(inclede_content=False) for task in task.get_with_status(
+                status=get_tasks_request.status
+            )
+        ]
+    else:
+        tasks = [task.json(inclede_content=False) for task in task.get_all()]
     logger.info(msg=f"get all tasks: number of tasks: {len(tasks)}")
     return {"tasks": tasks}
 
