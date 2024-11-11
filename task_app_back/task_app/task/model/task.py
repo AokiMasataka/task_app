@@ -12,7 +12,7 @@ __all__ = [
 ]
 
 
-def get_tasks() -> list[Task]:
+def get_tasks() -> list[dict]:
     query = """
     SELECT
         title, content, id, status, created_at, updated_at
@@ -20,12 +20,12 @@ def get_tasks() -> list[Task]:
         tasks
     """
     rows = query_execute(query=query, fetch="fetchall")
+    tasks = [dict(row) for row in rows]
 
-    tasks = [Task(*row) for row in rows]
     return tasks
 
 
-def get_tasks_with_status(status: int = None) -> list[Task]:
+def get_tasks_with_status(status: int = None) -> list[dict]:
     query = """
     SELECT
         title, content, id, status, created_at, updated_at
@@ -37,8 +37,8 @@ def get_tasks_with_status(status: int = None) -> list[Task]:
     values = (status, )
 
     rows = query_execute(query=query, values=values, fetch="fetchall")
+    tasks = [dict(row) for row in rows]
 
-    tasks = [Task(*row) for row in rows]
     return tasks
 
 
@@ -54,7 +54,7 @@ def get_task(uuid):
     values = (uuid,)
 
     row = query_execute(query=query, values=values, fetch="fetchone")
-    task = Task(*row)
+    task = dict(row)
     return task
 
 
