@@ -210,10 +210,11 @@
       "dependencies": [
         "npm:@babel/types@^7.24.7",
         "npm:@mdi/font@7.4.47",
+        "npm:@mdi/js@^7.4.47",
         "npm:@types/node@^20.14.10",
         "npm:@vitejs/plugin-vue@^5.0.5",
         "npm:autoprefixer@^10.4.20",
-        "npm:postcss@^8.4.47",
+        "npm:postcss@^8.4.49",
         "npm:roboto-fontface@*",
         "npm:sass@1.77.6",
         "npm:tailwindcss@^3.4.14",
@@ -224,6 +225,7 @@
         "npm:vite@^5.3.3",
         "npm:vue-tsc@^2.0.26",
         "npm:vue@^3.4.31",
+        "npm:vuedraggable@^4.1.0",
         "npm:vuetify@^3.6.11"
       ]
     }
