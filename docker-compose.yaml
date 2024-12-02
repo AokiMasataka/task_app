@@ -14,7 +14,7 @@ services:
     depends_on:
       - db
     environment:
-      - PGSQL_HOST=postgres
+      - PGSQL_HOST=task-app-postgres
       - PGSQL_USER=${PGSQL_USER}
       - PGSQL_PORT=${PGSQL_PORT}
       - PGSQL_NAME=${PGSQL_NAME}
@@ -22,7 +22,7 @@ services:
 
   db:
     image: postgres:14
-    container_name: postgres
+    container_name: task-app-postgres
     # ports:
     #   - 5432:5432
     volumes:
