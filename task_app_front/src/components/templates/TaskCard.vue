@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { Task } from '@/scripts/types';
+import { Task } from '../../scripts/types';
 
 const props = defineProps<{task: Task}>();
 defineEmits<{

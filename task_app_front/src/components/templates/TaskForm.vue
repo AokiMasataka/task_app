@@ -49,9 +49,9 @@
 </template>
 
 <script setup lang="ts">
-import { items } from '@/scripts/const';
-import { Task } from '@/scripts/types';
 import { computed, ref } from 'vue';
+import { items } from '../../scripts/const';
+import { Task } from '../../scripts/types';
 import DeleteBtn from '../common/DeleteBtn.vue';
 
 const props = defineProps<{isUpdateForm: boolean}>();

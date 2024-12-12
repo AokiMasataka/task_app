@@ -9,6 +9,6 @@
 </template>
 
 <script setup lang="ts">
-import Header from '@/components/common/Header.vue';
-import TasksView from '@/components/pages/TasksView.vue';
+import Header from './components/common/Header.vue';
+import TasksView from './components/pages/TasksView.vue';
 </script>

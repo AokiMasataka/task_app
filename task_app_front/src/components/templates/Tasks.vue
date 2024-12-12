@@ -44,9 +44,9 @@
 </template>
 
 <script setup lang="ts">
-import { fetchTaskAPI } from '@/scripts/taskApi';
-import { CreateInitTaskData, Task, Tasks } from '@/scripts/types';
 import { ref } from 'vue';
+import { fetchTaskAPI } from '../../scripts/taskApi';
+import { CreateInitTaskData, Task, Tasks } from '../../scripts/types';
 import AddTaskBtn from '../common/AddTaskBtn.vue';
 import TaskCard from './TaskCard.vue';
 import TaskForm from './TaskForm.vue';
