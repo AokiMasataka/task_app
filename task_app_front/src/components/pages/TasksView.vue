@@ -6,6 +6,7 @@
             :value-status="state.Todo"
             :tasks="fetchedTasks.todo"
             :emphasislStatus="isEmphasislStatus(state.Todo)"
+            :loading="loading"
             @create-task="createTask"
             @update-task="updateTask"
             @delete-task="deleteTask"
@@ -19,6 +20,7 @@
             :value-status="state.Doing"
             :tasks="fetchedTasks.doing"
             :emphasislStatus="isEmphasislStatus(state.Doing)"
+            :loading="loading"
             @create-task="createTask"
             @update-task="updateTask"
             @delete-task="deleteTask"
@@ -30,6 +32,7 @@
             display-status="Done"
             v-model:draggingTask="draggingTask"
             :value-status="state.Done"
+            :loading="loading"
             :tasks="fetchedTasks.done"
             :emphasislStatus="isEmphasislStatus(state.Done)"
             @create-task="createTask"
@@ -61,13 +64,19 @@ const fetchedTasks = ref<{
     done: Tasks
 }>({todo: [], doing: [], done: []});
 
+const loading = ref<boolean>(true);
 const emphasislStatus = ref<number | null>(null);
 const draggingTask = ref<Task | null>(null);
 
 async function fetchTasks() {
-    fetchedTasks.value.todo = await fetchTasksAPI(state.Todo);
-    fetchedTasks.value.doing = await fetchTasksAPI(state.Doing);
-    fetchedTasks.value.done = await fetchTasksAPI(state.Done);
+    loading.value = true;
+    try {
+        fetchedTasks.value.todo = await fetchTasksAPI(state.Todo);
+        fetchedTasks.value.doing = await fetchTasksAPI(state.Doing);
+        fetchedTasks.value.done = await fetchTasksAPI(state.Done);
+    } finally {
+        loading.value = false;
+    }
 };
 
 async function createTask(task: Task): Promise<void> {

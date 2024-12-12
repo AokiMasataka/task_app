@@ -13,7 +13,13 @@
                 @on-click="handleAddTaskBtn"
             />
         </div>
-
+        
+        <v-progress-linear
+            :class="{'invisible': !props.loading}"
+            color="primary"
+            indeterminate
+        ></v-progress-linear>
+        
         <TaskCard
             v-for="task in props.tasks"
             :task="task"
@@ -58,6 +64,7 @@ const props = defineProps<{
     valueStatus: number,
     tasks: Tasks,
     emphasislStatus: boolean,
+    loading: boolean,
 }>();
 const emit = defineEmits<{
     (e: 'createTask', task: Task): unknown,
