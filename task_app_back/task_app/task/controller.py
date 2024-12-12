@@ -21,6 +21,9 @@ class GetTasksRequest(BaseModel):
 
 @app.post("/task", status_code=201)
 def create_task(create_request: CreateRequest):
+    if create_request.title == "":
+        return JSONResponse(content={"message": "task title is required"}, status_code=400)
+
     t = task.create(
         title=create_request.title,
         content=create_request.content,

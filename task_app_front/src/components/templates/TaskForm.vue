@@ -23,6 +23,7 @@
                 v-model="model.title"
                 label="Task Title*"
                 required
+                :rules="[rules.required]"
             />
             <v-textarea
                 v-model="model.content"
@@ -39,10 +40,11 @@
                 @click="$emit('onClose')"
             />
             <v-btn
-                color="primary"
+                :color="valid ? 'primary' : 'grey-darken-1'"
                 text="Save"
                 variant="tonal"
                 @click="$emit('onSave')"
+                :readonly="!valid"
             />
         </v-card-actions>
     </v-card>
@@ -64,6 +66,11 @@ defineEmits<{
 
 const isOpenConfirmDialog = ref<boolean>(false);
 
+const valid = computed(() => {
+    return model.value.title != '';
+})
+
+const rules = {required: value => !!value || 'Field is required'}
 
 const formTitle = computed(() => {
     return props.isUpdateForm ?  "Update Task" : "Create Task";
