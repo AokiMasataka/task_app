@@ -1,12 +1,12 @@
 <template>
     <div
-        class="w-1/3 h-4/5 bg-neutral-700 mx-4 mt-4 rounded-md"
-        
+        class="w-1/3 h-4/5 bg-neutral-700 mx-4 mt-4 rounded-md overflow-auto"
         :class="{'border-2':  props.emphasislStatus,'border-rose-500': props.emphasislStatus}"
         @drop="handleTaskDrop"
         @dragover="dragOver"
     >
-        <div class="flex items-center justify-between">
+
+        <div class="flex items-center justify-between sticky top-0 z-50 bg-neutral-700">
             <h1 class="m-6 text-2xl">{{ props.displayStatus }}</h1>
             <AddTaskBtn
                 class="m-4"
