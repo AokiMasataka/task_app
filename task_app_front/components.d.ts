@@ -8,8 +8,12 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AddTaskBtn: typeof import('./src/components/common/AddTaskBtn.vue')['default']
-    Navi: typeof import('./src/components/templates/Navi.vue')['default']
-    TaskForm: typeof import('./src/components/common/TaskForm.vue')['default']
+    DeleteBtn: typeof import('./src/components/common/DeleteBtn.vue')['default']
+    DeleteForm: typeof import('./src/components/common/DeleteForm.vue')['default']
+    Header: typeof import('./src/components/common/Header.vue')['default']
+    SideBer: typeof import('./src/components/common/SideBer.vue')['default']
+    TaskCard: typeof import('./src/components/templates/TaskCard.vue')['default']
+    TaskForm: typeof import('./src/components/templates/TaskForm.vue')['default']
     Tasks: typeof import('./src/components/templates/Tasks.vue')['default']
     TasksView: typeof import('./src/components/pages/TasksView.vue')['default']
   }

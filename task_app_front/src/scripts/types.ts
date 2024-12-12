@@ -8,3 +8,13 @@ export type Task = {
 };
 
 export type Tasks = Task[];
+
+
+export const CreateInitTaskData = (status: number): Task => {
+    return {
+        title: "",
+        content: "",
+        id: "",
+        status: status
+    };
+};

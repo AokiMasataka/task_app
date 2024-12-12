@@ -1,5 +1,15 @@
 <template>
-    <v-card :title="formTitle">
+    <v-card>
+        <v-card-title
+            class="m-4 flex justify-between"
+        >
+            {{ formTitle }}
+            <DeleteBtn v-if="props.isUpdateForm"
+                v-model="isOpenConfirmDialog"
+                @on-delete="$emit('onDelete')"
+            />
+        </v-card-title>
+
         <v-select
             class="mx-6"
             v-if="props.isUpdateForm"
@@ -22,24 +32,17 @@
             />
         </v-card-text>
         <v-divider />
-        <v-card-actions>
+        <v-card-actions class="px-6">
             <v-btn
                 text="Close"
                 variant="plain"
                 @click="$emit('onClose')"
             />
             <v-btn
-                color="#5865f2"
+                color="primary"
                 text="Save"
                 variant="tonal"
                 @click="$emit('onSave')"
-            />
-            <v-btn
-                v-if="props.isUpdateForm"
-                color="red"
-                text="Delete"
-                variant="tonal"
-                @click="$emit('onDelete')"
             />
         </v-card-actions>
     </v-card>
@@ -48,7 +51,8 @@
 <script setup lang="ts">
 import { items } from '@/scripts/const';
 import { Task } from '@/scripts/types';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
+import DeleteBtn from '../common/DeleteBtn.vue';
 
 const props = defineProps<{isUpdateForm: boolean}>();
 const model = defineModel<Task>({ required: true });
@@ -57,6 +61,8 @@ defineEmits<{
     (e: 'onSave'): void,
     (e: 'onDelete'): void,
 }>();
+
+const isOpenConfirmDialog = ref<boolean>(false);
 
 
 const formTitle = computed(() => {
