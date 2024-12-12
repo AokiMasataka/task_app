@@ -23,8 +23,6 @@ services:
   db:
     image: postgres:14
     container_name: task-app-postgres
-    # ports:
-    #   - 5432:5432
     volumes:
       - ./postgresql/db_store:/var/lib/postgresql/data
       - ./postgresql/init:/docker-entrypoint-initdb.d
@@ -32,6 +30,3 @@ services:
       - POSTGRES_USER=${PGSQL_USER}
       - POSTGRES_PASSWORD=${PGSQL_PASS}
       - POSTGRES_DB=${PGSQL_NAME}
-
-# volumes:
-#   db_store:
