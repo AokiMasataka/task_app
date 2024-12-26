@@ -5,7 +5,6 @@
         >
             {{ formTitle }}
             <DeleteBtn v-if="props.isUpdateForm"
-                v-model="isOpenConfirmDialog"
                 @on-delete="$emit('onDelete')"
             />
         </v-card-title>
@@ -51,7 +50,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import { items } from '../../scripts/const';
 import { Task } from '../../scripts/types';
 import DeleteBtn from '../common/DeleteBtn.vue';
@@ -63,8 +62,6 @@ defineEmits<{
     (e: 'onSave'): void,
     (e: 'onDelete'): void,
 }>();
-
-const isOpenConfirmDialog = ref<boolean>(false);
 
 const valid = computed(() => {
     return model.value.title != '';

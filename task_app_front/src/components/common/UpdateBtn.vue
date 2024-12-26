@@ -1,11 +1,12 @@
 <template>
-    <v-tooltip>
+    <v-tooltip location="top">
         <template  v-slot:activator="{ props }">
             <v-icon
+                :icon="IconPencil"
                 v-bind="props"
                 class="pt-1"
                 @click="$emit('onUpdate')">
-                mdi-pencil
+                <!-- mdi-pencil -->
             </v-icon>
         </template>
         <span>update</span>
@@ -13,6 +14,7 @@
 </template>
 
 <script setup lang="ts">
+import IconPencil from '../icons/Pencil.vue';
 
 defineEmits<{(e: 'onUpdate'): void}>();
 </script>

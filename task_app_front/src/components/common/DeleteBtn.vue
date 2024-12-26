@@ -1,11 +1,12 @@
 <template>
-    <v-tooltip>
+    <v-tooltip location="top">
         <template  v-slot:activator="{ props }">
             <v-icon
+                :icon="IconDelete"
                 v-bind="props"
                 class="pt-1"
                 @click="deleteDialog = true">
-                mdi-delete
+                <!-- mdi-delete -->
             </v-icon>
         </template>
         <span>delete</span>
@@ -33,6 +34,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import IconDelete from '../icons/Trash.vue';
 
 const deleteDialog = ref<boolean>(false);
 defineEmits<{(e: 'onDelete'): void}>();
