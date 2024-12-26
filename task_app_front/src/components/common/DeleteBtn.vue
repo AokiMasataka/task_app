@@ -4,21 +4,20 @@
             <v-icon
                 v-bind="props"
                 class="pt-1"
-                color="red"
-                @click="model = true">
+                @click="deleteDialog = true">
                 mdi-delete
             </v-icon>
         </template>
         <span>delete</span>
     </v-tooltip>
 
-    <v-dialog v-model="model" max-width="600">
+    <v-dialog v-model="deleteDialog" max-width="600">
         <v-card title="Delete Task?">
             <v-card-actions>
                 <v-btn
                     text="Cancel"
                     variant="plain"
-                    @click="model = false"
+                    @click="deleteDialog = false"
                 />
 
                 <v-btn
@@ -33,9 +32,8 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 
-const model = defineModel<boolean>({ required: true });
-defineEmits<{
-    (e: 'onDelete'): void,
-}>();
+const deleteDialog = ref<boolean>(false);
+defineEmits<{(e: 'onDelete'): void}>();
 </script>
