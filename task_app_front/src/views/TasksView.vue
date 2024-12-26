@@ -1,8 +1,8 @@
 <template>
     <div class="flex justify-between h-lvh mx-8">
         <TaskList
-            display-status="Todo"
             v-model:draggingTask="draggingTask"
+            display-status="Todo"
             :value-status="state.Todo"
             :tasks="fetchedTasks.todo"
             :emphasislStatus="isEmphasislStatus(state.Todo)"
@@ -15,8 +15,8 @@
             @on-drag-end="emphasislStatus=null"
         ></TaskList>
         <TaskList
+            v-model:draggingTask="draggingTask"    
             display-status="Doing"
-            v-model:draggingTask="draggingTask"
             :value-status="state.Doing"
             :tasks="fetchedTasks.doing"
             :emphasislStatus="isEmphasislStatus(state.Doing)"
@@ -29,12 +29,12 @@
             @on-drag-end="emphasislStatus=null"
         ></TaskList>
         <TaskList
+            v-model:draggingTask="draggingTask"    
             display-status="Done"
-            v-model:draggingTask="draggingTask"
             :value-status="state.Done"
-            :loading="loading"
             :tasks="fetchedTasks.done"
             :emphasislStatus="isEmphasislStatus(state.Done)"
+            :loading="loading"
             @create-task="createTask"
             @update-task="updateTask"
             @delete-task="deleteTask"
@@ -47,15 +47,15 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { state } from '../../scripts/const';
+import TaskList from '../components/templates/Tasks.vue';
+import { state } from '../scripts/const';
 import {
-    deleteTaskAPI,
-    fetchTasksAPI,
-    postTaskAPI,
-    updateTaskAPI
-} from '../../scripts/taskApi';
-import { Task, Tasks } from '../../scripts/types';
-import TaskList from '../templates/Tasks.vue';
+deleteTaskAPI,
+fetchTasksAPI,
+postTaskAPI,
+updateTaskAPI
+} from '../scripts/taskApi';
+import { Task, Tasks } from '../scripts/types';
 
 
 const fetchedTasks = ref<{
