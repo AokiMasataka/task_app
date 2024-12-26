@@ -6,7 +6,7 @@
         @dragover="dragOver"
     >
 
-        <div class="flex items-center justify-between sticky top-0 z-50 bg-neutral-700">
+        <div class="flex mb-4 items-center justify-between sticky top-0 z-40 bg-neutral-700">
             <h1 class="m-6 text-2xl">{{ props.displayStatus }}</h1>
             <AddTaskBtn
                 class="m-4"
@@ -26,6 +26,7 @@
             @handleFecthTask="handleFecthTask"
             @on-drag-start="dragStart(task)"
             @on-drag-end="$emit('onDragEnd')"
+            @on-delete="$emit('deleteTask', task.id)"
         ></TaskCard>
 
         <v-dialog v-model="isActivateForm" max-width="600">
