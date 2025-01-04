@@ -47,15 +47,15 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import TaskList from '../components/templates/Tasks.vue';
-import { state } from '../scripts/const';
+import TaskList from '../../components/TaskList';
+import { state } from '../../scripts/const';
 import {
 deleteTaskAPI,
 fetchTasksAPI,
 postTaskAPI,
 updateTaskAPI
-} from '../scripts/taskApi';
-import { Task, Tasks } from '../scripts/types';
+} from '../../scripts/taskApi';
+import { Task, Tasks } from '../../scripts/types';
 
 
 const fetchedTasks = ref<{

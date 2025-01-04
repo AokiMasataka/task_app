@@ -10,5 +10,5 @@
 
 <script setup lang="ts">
 import Header from './components/common/Header.vue';
-import TasksView from './views/TasksView.vue';
+import TasksView from './views/TasksView';
 </script>
