@@ -6,7 +6,9 @@
     "serve": "deno run --allow-net --allow-read https://deno.land/std@0.157.0/http/file_server.ts dist/"
   },
   "imports": {
+    "@tailwindcss/typography": "npm:@tailwindcss/typography@^0.5.15",
     "autoprefixer": "npm:autoprefixer@^10.4.20",
+    "marked": "npm:marked@^15.0.5",
     "postcss": "npm:postcss@^8.4.49",
     "tailwindcss": "npm:tailwindcss@^3.4.16",
     "vuetify": "npm:vuetify@3",
