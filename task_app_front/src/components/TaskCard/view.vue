@@ -42,8 +42,8 @@
 
 <script setup lang="ts">
 import { Task } from '../../scripts/types';
-import DeleteBtn from '../common/DeleteBtn.vue';
-import UpdateBtn from '../common/UpdateBtn.vue';
+import DeleteBtn from '../DeleteBtn';
+import UpdateBtn from '../UpdateBtn';
 
 const props = defineProps<{task: Task}>();
 defineEmits<{
