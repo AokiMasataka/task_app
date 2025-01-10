@@ -29,22 +29,23 @@
             @on-delete="$emit('deleteTask', task.id)"
         ></TaskCard>
 
-        <v-dialog v-model="isActivateForm" max-width="600">
+        <v-dialog v-model="isActivateForm" max-width="800">
             <TaskForm
                 v-if="!isLoading"
                 v-model="formProps.initTaskData"
                 :is-update-form="formProps.isUpdateForm"
+                :is-preview-mode="formProps.isPreviewMode"
                 @on-close="isActivateForm = false"
                 @on-save="formProps.onSave"
                 @on-delete="formProps.onDelete"
             />
-            <div 
+            <div
                 v-else
                 class="flex justify-center items-center"
             >
-            <v-progress-circular
-                indeterminate
-            />
+                <v-progress-circular
+                    indeterminate
+                />
             </div>
         </v-dialog>
     </div>
@@ -81,11 +82,13 @@ const isActivateForm = ref<boolean>(false);
 const formProps = ref<{
     initTaskData: Task,
     isUpdateForm: boolean,
-    onSave: () => unknown,
+    isPreviewMode: boolean,
+    onSave: () => Promise<void>,
     onDelete: () => Promise<void>,
 }>({
     initTaskData: CreateInitTaskData(props.valueStatus),
     isUpdateForm: true,
+    isPreviewMode: false,
     onSave: async () => {},
     onDelete: async () => {},
 });
@@ -122,6 +125,7 @@ function handleAddTaskBtn(): void {
     isActivateForm.value = true;
     formProps.value.initTaskData = CreateInitTaskData(props.valueStatus);
     formProps.value.isUpdateForm = false;
+    formProps.value.isPreviewMode = false;
     formProps.value.onSave = async () => {
         emit('createTask', formProps.value.initTaskData);
         isActivateForm.value = false;
@@ -129,7 +133,7 @@ function handleAddTaskBtn(): void {
     formProps.value.onDelete = async () => {};
 };
 
-async function handleFecthTask(task_id: string): Promise<void> {
+async function handleFecthTask(task_id: string, isPreviewMode?: boolean): Promise<void> {
     isLoading.value = true;
     isActivateForm.value = true;
 
@@ -140,6 +144,7 @@ async function handleFecthTask(task_id: string): Promise<void> {
     };
     
     formProps.value.isUpdateForm = true;
+    formProps.value.isPreviewMode = isPreviewMode || false;
     formProps.value.onSave = async () => {
         emit('updateTask', formProps.value.initTaskData);
         isActivateForm.value = false;

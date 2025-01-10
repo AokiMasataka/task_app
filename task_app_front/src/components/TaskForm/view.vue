@@ -1,5 +1,5 @@
 <template>
-    <v-card>
+    <v-card class="overflow-hidden">
         <v-card-title
             class="m-4 flex justify-between"
         >
@@ -7,6 +7,7 @@
             <DeleteBtn v-if="props.isUpdateForm"
                 @on-delete="$emit('onDelete')"
             />
+            
         </v-card-title>
 
         <v-select
@@ -17,22 +18,27 @@
             item-title="text"
             item-value="value"
         />
+
         <v-card-text>
             <v-text-field
                 v-model="model.title"
-                label="Task Title*"
+                variant="solo-filled"
+                placeholder="input title"
                 required
                 :rules="[rules.required]"
             />
-            <v-textarea
-                v-model="model.content"
-                label="Content*"
-                rows="24"
-                required
-            />
+            <textArea
+                v-model:content="model.content"
+                v-model:isPreviewMode="isPreviewMode"
+            ></textArea>
         </v-card-text>
+        
         <v-divider />
         <v-card-actions class="px-6">
+            <v-btn
+                text="mode change"
+                @click="isPreviewMode = !isPreviewMode"
+            />
             <v-btn
                 text="Close"
                 variant="plain"
@@ -50,18 +56,21 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { items } from '../../scripts/const';
 import { Task } from '../../scripts/types';
 import DeleteBtn from '../DeleteBtn';
+import textArea from './textArea.vue';
 
-const props = defineProps<{isUpdateForm: boolean}>();
+const props = defineProps<{isUpdateForm: boolean, isPreviewMode: boolean}>();
 const model = defineModel<Task>({ required: true });
 defineEmits<{
     (e: 'onClose'): void,
     (e: 'onSave'): void,
     (e: 'onDelete'): void,
 }>();
+
+const isPreviewMode = ref<boolean>(props.isPreviewMode);
 
 const valid = computed(() => {
     return model.value.title != '';

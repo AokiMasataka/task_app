@@ -9,7 +9,7 @@
             <v-card-item>
                 <v-card-title>
                     <span
-                        @click="$emit('handleFecthTask', props.task.id)"
+                        @click="$emit('handleFecthTask', props.task.id, true)"
                         style="cursor: pointer"
                     >
                         {{ props.task.title }}
@@ -19,8 +19,6 @@
                     {{ isEmptyContent(props.task.content) }}
                 </v-card-subtitle>
             </v-card-item>
-
-            
         </v-card>
 
         <v-card
@@ -29,7 +27,7 @@
         >
             <div class="mx-1 my-1 flex gap-x-1.5">
                 <UpdateBtn
-                    @on-update="$emit('handleFecthTask', props.task.id)"
+                    @on-update="$emit('handleFecthTask', props.task.id, false)"
                 />
 
                 <DeleteBtn
@@ -47,7 +45,7 @@ import UpdateBtn from '../UpdateBtn';
 
 const props = defineProps<{task: Task}>();
 defineEmits<{
-    (e: 'handleFecthTask', task_id: string): unknown,
+    (e: 'handleFecthTask', task_id: string, isPreviewMode: boolean): unknown,
     (e: 'onDragStart', task: Task): unknown,
     (e: 'onDragEnd'): unknown,
     (e: 'onDelete'): unknown
