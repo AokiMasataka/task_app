@@ -7,10 +7,3 @@ export const state = {
     Doing: 1,
     Done: 2
 };
-
-export const items = Object.entries(state).map(([text, value]) => {
-    return {
-        text,
-        value
-    }
-});

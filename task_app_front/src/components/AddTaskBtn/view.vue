@@ -3,5 +3,5 @@
 </template>
 
 <script setup lang="ts">
-defineEmits<{(e: 'onClick'): void}>();
+    defineEmits<{(e: 'onClick'): void}>();
 </script>
