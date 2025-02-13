@@ -6,7 +6,6 @@ RUN mkdir /app/task_app
 
 COPY ./task_app /app/task_app
 COPY ./requirements.txt /app
-COPY ./init_db.py .app
 
 RUN pip install -r requirements.txt
 
