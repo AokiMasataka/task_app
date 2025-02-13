@@ -1,16 +1,20 @@
-## Structs
+# Task App
 
-### Task
+# usage
 
-| key | type | etc |
-| --- | --- | --- |
-| id | uuid | PK and v4|
-| title | string | |
-| content | string | |
-| status | int | ref Status(Enum) |
-| cretaed_at | datetime| |
-| updated_at | datetime| |
+```
+git clone https://github.com/AokiMasataka/task_app.git
+cd task_app
+docker compose up
+```
 
-### Status(Enum)
+http://localhost:80
 
-{TODO: 0, DOING: 1, DONE: 2}
+## devlopment frontend
+
+```
+cd task_app_front
+deno task dev
+```
+
+http://localhost:3000

@@ -2,7 +2,7 @@ import uvicorn
 from os import environ
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
-from . import task
+from .api import task
 
 
 app = FastAPI()

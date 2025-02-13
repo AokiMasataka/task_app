@@ -1,6 +1,6 @@
 import { HOST, PORT } from "./const.ts";
+import { dateToString, stringToDate } from "./date.ts";
 import { Task, Tasks } from "./types.ts";
-
 
 export async function fetchTasksAPI(status: number): Promise<Tasks> {
     const response = await fetch(
@@ -10,7 +10,14 @@ export async function fetchTasksAPI(status: number): Promise<Tasks> {
             headers: {"content-type": "application/json"},
         }
     );
-    const tasks = (await response.json()).tasks;
+    const rawTasks: (Omit<Task, "duedate"> & {duedate: string|null})[] = (await response.json()).tasks;
+    const tasks = rawTasks.map(t => {
+        return {
+            ...t,
+            duedate:t.duedate == null ? null : stringToDate(t.duedate) 
+        }
+    });
+    
     return tasks;
 }
 
@@ -23,38 +30,36 @@ export async function fetchTaskAPI(id: string): Promise<Task> {
         }
     );
     const task = (await response.json());
+    if (task.duedate !== null) {
+       task.duedate = stringToDate(task.duedate);
+    }
     return task;
 }
 
-export async function postTaskAPI(title: string, content: string, status: number): Promise<string> {
-    const response = await fetch(
-        `http://${HOST}:${PORT}/task`,
-        {
-            method: "POST",
+async function modifyTask(task: Task, method: "POST"|"PUT") {
+    const path = method === "POST" ? "/task" : `/task/${task.id}`
+    const requestUrl = new URL(path, `http://${HOST}:${PORT}`)
+    await fetch(
+        requestUrl,{
+            method: method,
             headers: {"content-type": "application/json"},
-            body: JSON.stringify({title: title, content: content, status: status})
+            body: JSON.stringify({
+                title: task.title,
+                content: task.content,
+                status: task.status,
+                priority: task.priority,
+                duedate: task.duedate == null ? null : dateToString(task.duedate)
+            })
         }
     );
-
-    const task_id = (await response.json()).task_id;
-    return task_id;
 }
 
-export async function updateTaskAPI(
-    id: string,
-    title: string,
-    content: string,
-    status: number,
-) {
-    await fetch(
-        `http://${HOST}:${PORT}/task/${id}`,
-        {
-            method: "PUT",
-            headers: {"content-type": "application/json"},
-            body: JSON.stringify({title: title, content: content, status: status})
-        }
-    );
-    
+export async function postTaskAPI(task: Task) {
+    await modifyTask(task, "POST");
+}
+
+export async function updateTaskAPI(task: Task) {
+    await modifyTask(task, "PUT");
 }
 
 export async function deleteTaskAPI(id: string) {

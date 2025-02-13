@@ -5,6 +5,19 @@ export type Task = {
     content: string;
     id: string;
     status: number;
+    priority: number;
+    duedate: Date | null;
 };
 
 export type Tasks = Task[];
+
+export const CreateInitTaskData = (status: number): Task => {
+    return {
+        title: "",
+        content: "",
+        id: "",
+        status: status,
+        priority: 0,
+        duedate: null
+    };
+};

@@ -1,3 +1,3 @@
-```sh
-deno task dev
-```
+# icon
+
+https://icones.js.org/
