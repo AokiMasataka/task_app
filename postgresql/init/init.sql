@@ -5,7 +5,7 @@ CREATE TABLE tasks (
     id UUID PRIMARY KEY,
     title varchar(128) NOT NULL,
     content TEXT,
-    status INT,
+    status INT NOT NULL,
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL
 );
