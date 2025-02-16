@@ -4,6 +4,7 @@ from logging import getLogger
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
+from uuid import uuid4
 from ..model import Task, task
 
 
@@ -19,13 +20,16 @@ class CreateRequest(BaseModel):
     duedate: Union[str, None] = None
 
 
-class GetTasksRequest(BaseModel):
+class UpdateRequest(BaseModel):
+    title: str
+    content: str
     status: int
+    priority: int
+    duedate: Union[str, None] = None
 
 
 @app.post("/task", status_code=201)
 def create_task(create_request: CreateRequest):
-    print(create_request)
     if create_request.title == "":
         return JSONResponse(content={"message": "task title is required"}, status_code=400)
 
@@ -34,6 +38,7 @@ def create_task(create_request: CreateRequest):
     else:
         duedate = create_request.duedate
     new_task = Task(
+        uuid=uuid4(),
         title=create_request.title,
         content=create_request.content,
         status=create_request.status,
@@ -65,7 +70,7 @@ def get_task(task_id):
 
 
 @app.put("/task/{task_id}", status_code=200)
-def update_task(task_id, create_request: CreateRequest):
+def update_task(task_id, create_request: UpdateRequest):
     if create_request.duedate is not None:
         duedate = datetime.datetime.strptime(create_request.duedate, "%Y-%m-%d").date()
     else:
