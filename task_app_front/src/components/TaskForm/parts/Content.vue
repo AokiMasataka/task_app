@@ -1,16 +1,42 @@
 <template>
-    <div
-        class="src-components-TaskForm-Markdown"
-        v-html="markdown"
-    ></div>
-</template>
+    <div style="height: 60vh" class="overflow-scroll">
+        <div
+            v-if="isPreviewMode"
+            class="src-components-TaskForm-Markdown"
+            v-html="markdown"
+        ></div>
 
+        <v-textarea
+            v-else
+            v-model="content"
+            label="Content*"
+            rows="24"
+            required
+            auto-grow
+            variant="solo-filled"
+            hide-details="true"
+        />
+    </div>
+
+</template>
 <script setup lang="ts">
 import { marked } from 'marked';
+import { onMounted, ref, watch } from 'vue';
+const content = defineModel<string>("content", { required: true });
+const isPreviewMode = defineModel<boolean>("isPreviewMode", {required: true});
 
 const props = defineProps<{content: string}>();
+const markdown = ref<string>("");
 
-const markdown = marked(props.content);
+async function perseMarkdown (){
+    markdown.value = await marked(props.content);
+}
+
+watch(() => isPreviewMode.value, () => {
+    perseMarkdown()
+});
+
+onMounted(perseMarkdown);
 </script>
 
 <style lang="css">

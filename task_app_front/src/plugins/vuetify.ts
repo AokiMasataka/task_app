@@ -14,9 +14,6 @@ import { VDateInput } from 'vuetify/labs/VDateInput'
 import colors from 'vuetify/util/colors'
 
 export default createVuetify({
-  locale: {
-    locale: 'en-CA',
-  },
   components: {
     VDateInput,
   },

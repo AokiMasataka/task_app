@@ -6,7 +6,6 @@
                 v-bind="props"
                 class="pt-1"
                 @click="$emit('onUpdate')">
-                <!-- mdi-pencil -->
             </v-icon>
         </template>
         <span>update</span>

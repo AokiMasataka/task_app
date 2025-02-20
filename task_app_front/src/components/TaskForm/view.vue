@@ -10,34 +10,36 @@
             
         </v-card-title>
         
-        <Selecters
-            
-            v-model:status="model.status"
-            v-model:priority="model.priority"
-            
-            v-model:duedate="model.duedate"
-            :is-update-form="props.isUpdateForm"
-            
-        />
+        <div class="mx-8 mb-4 grid grid-cols-3 gap-8">
+            <Status
+                v-model:isPreviewMode="isPreviewMode"
+                v-model:status="model.status"
+            />
+            <Priority
+                v-model:isPreviewMode="isPreviewMode"
+                v-model:priority="model.priority"
+            />
+            <Duedate
+                v-model:isPreviewMode="isPreviewMode"
+                v-model:duedate="model.duedate"
+            />
+        </div>
 
         <v-card-text>
-            <v-text-field
-                v-model="model.title"
-                variant="solo-filled"
-                placeholder="input title"
-                required
-                :rules="[rules.required]"
-            />
-            <TextArea
-                v-model:content="model.content"
+            <Title
                 v-model:isPreviewMode="isPreviewMode"
-            ></TextArea>
+                v-model:title="model.title"
+            />
+            <Content
+                v-model:isPreviewMode="isPreviewMode"
+                v-model:content="model.content"
+            />
         </v-card-text>
         
         <v-divider />
         <v-card-actions class="px-6">
             <v-btn
-                text="mode change"
+                text="switch mode"
                 @click="isPreviewMode = !isPreviewMode"
             />
             <v-btn
@@ -60,8 +62,11 @@
 import { computed, ref } from 'vue';
 import { Task } from '../../scripts/types';
 import DeleteBtn from '../DeleteBtn';
-import Selecters from './Selecters.vue';
-import TextArea from './TextArea.vue';
+import Content from './parts/Content.vue';
+import Duedate from './parts/Duedate.vue';
+import Priority from './parts/Priority.vue';
+import Status from './parts/Status.vue';
+import Title from './parts/Title.vue';
 
 
 const props = defineProps<{isUpdateForm: boolean, isPreviewMode: boolean}>();
@@ -77,8 +82,6 @@ const isPreviewMode = ref<boolean>(props.isPreviewMode);
 const valid = computed(() => {
     return model.value.title != '';
 })
-
-const rules = {required: value => !!value || 'Field is required'}
 
 const formTitle = computed(() => {
     return props.isUpdateForm ?  "Update Task" : "Create Task";

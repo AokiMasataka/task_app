@@ -1,6 +1,6 @@
 <template>
     <div
-        class="w-1/3 h-4/5 bg-neutral-700 mx-4 mt-4 rounded-md overflow-auto"
+        class="w-1/3 h-4/5 bg-neutral-700 mx-2 mt-4 rounded-md overflow-auto"
         :class="{'border-2':  props.emphasislStatus,'border-rose-500': props.emphasislStatus}"
         @drop="handleTaskDrop"
         @dragover="dragOver"
