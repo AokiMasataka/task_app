@@ -1,5 +1,5 @@
 <template>
-    <v-card class="overflow-hidden">
+    <v-card>
         <v-card-title
             class="m-4 flex justify-between"
         >
@@ -12,22 +12,18 @@
         
         <div class="mx-8 mb-4 grid grid-cols-3 gap-8">
             <Status
-                v-model:isPreviewMode="isPreviewMode"
                 v-model:status="model.status"
             />
             <Priority
-                v-model:isPreviewMode="isPreviewMode"
                 v-model:priority="model.priority"
             />
             <Duedate
-                v-model:isPreviewMode="isPreviewMode"
                 v-model:duedate="model.duedate"
             />
         </div>
 
         <v-card-text>
             <Title
-                v-model:isPreviewMode="isPreviewMode"
                 v-model:title="model.title"
             />
             <Content

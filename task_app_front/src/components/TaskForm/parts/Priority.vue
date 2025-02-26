@@ -1,7 +1,5 @@
 <template>
-    <div v-if="isPreviewMode">aaaa</div>
     <v-select
-        v-else
         v-model="priority"
         :items="prioritys"
         item-title="text"
@@ -30,6 +28,5 @@
 import IconCircle from '../../icons/Circle.vue';
 import { colors, prioritys } from '../const';
 
-const isPreviewMode = defineModel<boolean>("isPreviewMode", { required: true });
 const priority = defineModel<number>("priority", { required: true });
 </script>

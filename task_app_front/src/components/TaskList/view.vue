@@ -29,7 +29,7 @@
             @on-delete="$emit('deleteTask', task.id)"
         ></TaskCard>
 
-        <v-dialog v-model="isActivateForm" max-width="800">
+        <v-dialog v-model="isActivateForm" max-width="1000">
             <TaskForm
                 v-if="!isLoading"
                 v-model="formProps.initTaskData"

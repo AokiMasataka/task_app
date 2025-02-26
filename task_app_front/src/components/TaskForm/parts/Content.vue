@@ -1,21 +1,27 @@
 <template>
-    <div style="height: 60vh" class="overflow-scroll">
+    <div style="height: 60vh" class="overflow-auto">
         <div
             v-if="isPreviewMode"
-            class="src-components-TaskForm-Markdown"
+            class="src-components-TaskForm-Markdown mx-2"
             v-html="markdown"
         ></div>
-
-        <v-textarea
-            v-else
-            v-model="content"
-            label="Content*"
-            rows="24"
-            required
-            auto-grow
-            variant="solo-filled"
-            hide-details="true"
-        />
+        
+        <div v-else class="grid grid-cols-2 gap-2">
+            <v-textarea
+                v-model="content"
+                label="Content"
+                rows="24"
+                required
+                auto-grow
+                variant="solo-filled"
+                hide-details="true"
+                @input="perseMarkdown"
+            />
+            <div
+                class="src-components-TaskForm-Markdown"
+                v-html="markdown"
+            ></div>
+        </div>
     </div>
 
 </template>

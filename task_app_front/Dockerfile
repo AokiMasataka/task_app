@@ -1,9 +1,9 @@
-FROM denoland/deno:latest as build-stage
+FROM denoland/deno:latest AS build-stage
 
 WORKDIR /app
 COPY ./ .
-run deno task build
+RUN deno task build
 
-FROM nginx:stable-perl as production-stage
+FROM nginx:stable-perl AS production-stage
 
 COPY --from=build-stage /app/dist /usr/share/nginx/html

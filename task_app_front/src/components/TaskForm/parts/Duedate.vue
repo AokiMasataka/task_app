@@ -1,7 +1,5 @@
 <template>
-    <div v-if="isPreviewMode">aaaaa</div>
     <v-menu
-        v-else
         :close-on-content-click="false"
         location="end"
         v-model="viewCalendar"
@@ -37,7 +35,6 @@ import { onMounted, ref } from 'vue';
 import { dateToString } from '../../../scripts/date';
 import IconClose from '../../icons/Close.vue';
 
-const isPreviewMode = defineModel<boolean>("isPreviewMode", { required: true });
 const duedate = defineModel<Date | null>("duedate", { required: true });
 const displayDuedate = ref<string | null>(null);
 const viewCalendar = ref<boolean>(false);
