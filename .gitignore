@@ -1,2 +1,4 @@
 .env
 postgresql/db_store/*
+
+doc.md

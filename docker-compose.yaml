@@ -1,24 +1,24 @@
-x-template: &flyway-template
-  image: flyway/flyway:latest
-  volumes:
-    - ./postgresql/sql:/flyway/sql
-  depends_on:
-    db:
-      condition: service_healthy
-  environment:
-    - FLYWAY_URL=jdbc:postgresql://task-app-postgres:${PGSQL_PORT}/${PGSQL_NAME}
-    - FLYWAY_USER=${PGSQL_USER}
-    - FLYWAY_PASSWORD=${PGSQL_PASS}
-    - FLYWAY_LOCATIONS=filesystem:/flyway/sql
-    - FLYWAY_CLEAN_DISABLED=false
+# x-template: &flyway-template
+#   image: flyway/flyway:latest
+#   volumes:
+#     - ./postgresql/sql:/flyway/sql
+#   depends_on:
+#     db:
+#       condition: service_healthy
+#   environment:
+#     - FLYWAY_URL=jdbc:postgresql://task-app-postgres:${PGSQL_PORT}/${PGSQL_NAME}
+#     - FLYWAY_USER=${PGSQL_USER}
+#     - FLYWAY_PASSWORD=${PGSQL_PASS}
+#     - FLYWAY_LOCATIONS=filesystem:/flyway/sql
+#     - FLYWAY_CLEAN_DISABLED=false
 
 services:
-  frnotend:
-    build: task_app_front
-    container_name: task-app-front
-    ports:
-      - 80:80
-      - 443:443
+  # frnotend:
+  #   build: task_app_front
+  #   container_name: task-app-front
+  #   ports:
+  #     - 80:80
+  #     - 443:443
 
   backend:
     build: task_app_back
@@ -34,23 +34,23 @@ services:
       - PGSQL_NAME=${PGSQL_NAME}
       - PGSQL_PASS=${PGSQL_PASS}
 
-  flyway-baseline:
-    <<: *flyway-template
-    command: baseline -baselineVersion=1.0.0
-    depends_on:
-      db:
-        condition: service_healthy
+  # flyway-baseline:
+  #   <<: *flyway-template
+  #   command: baseline -baselineVersion=1.0.0
+  #   depends_on:
+  #     db:
+  #       condition: service_healthy
 
-  flyway-migrate:
-    <<: *flyway-template
-    command: migrate
-    depends_on:
-      flyway-baseline:
-        condition: service_completed_successfully
+  # flyway-migrate:
+  #   <<: *flyway-template
+  #   command: migrate
+  #   depends_on:
+  #     flyway-baseline:
+  #       condition: service_completed_successfully
 
-  flyway-info:
-    <<: *flyway-template
-    command: info
+  # flyway-info:
+  #   <<: *flyway-template
+  #   command: info
 
   db:
     image: postgres:17.2-alpine3.21

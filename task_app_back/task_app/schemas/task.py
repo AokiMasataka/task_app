@@ -29,3 +29,17 @@ class Task:
         
         if self.updated_at is None:
             self.updated_at = datetime.datetime.now()
+
+    def save(self):
+        pass
+
+    
+
+    @classmethod
+    def select_partial(cls, *arg) -> list[dict]:
+        pass
+
+        
+    @classmethod
+    def select(cls) -> list["Task"]:
+        pass

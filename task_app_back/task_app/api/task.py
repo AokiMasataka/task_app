@@ -5,7 +5,8 @@ from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from uuid import uuid4
-from ..model import Task, task
+from ..schemas import Task
+from ..services import task
 
 
 logger = getLogger("uvicorn.app")

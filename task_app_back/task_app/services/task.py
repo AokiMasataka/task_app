@@ -1,4 +1,4 @@
-from .schema import Task
+from ..schemas import Task
 from .utils import query_execute, DatabaseConnector
 
 
@@ -42,12 +42,16 @@ def get(task_id: str):
     """
     values = (task_id,)
 
-    row = query_execute(query=query, values=values, fetch="fetchone")
+    with DatabaseConnector() as cur:
+        cur.execute(query=query, vars=values)
+        row = cur.fetchone()
+
     task = dict(row)
     return task
 
 
 def create(task: Task):
+    
     query = """
     INSERT INTO tasks
         (id, title, content, status, priority, duedate, created_at, updated_at)
@@ -65,7 +69,8 @@ def create(task: Task):
         task.updated_at
     )
 
-    query_execute(query=query, values=values)
+    with DatabaseConnector() as cur:
+        cur.execute(query=query, vars=values)
 
 
 def update(task: Task):
