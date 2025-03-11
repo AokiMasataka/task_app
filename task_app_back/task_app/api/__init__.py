@@ -1,1 +1,2 @@
-from . import task
+from .task import task
+from .project import project

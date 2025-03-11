@@ -1,13 +1,16 @@
+import psycopg2.extras
 import uvicorn
 from os import environ
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
-from .api import task
+from .api import task, project
 
 
+psycopg2.extras.register_uuid()
 app = FastAPI()
 
 app.include_router(task.app)
+app.include_router(project.app)
 
 app.add_middleware(
     CORSMiddleware,

@@ -1,5 +1,6 @@
+from uuid import UUID
 from ..schemas import Task
-from .utils import query_execute, DatabaseConnector
+from .utils import DatabaseConnector
 
 
 __all__ = [
@@ -31,7 +32,7 @@ def get_tasks_with_status(status: int = None) -> list[dict]:
     return tasks
 
 
-def get(task_id: str):
+def get(task_id: UUID):
     query = """
     SELECT
         title, content, id, status, priority, duedate, created_at, updated_at
@@ -59,7 +60,7 @@ def create(task: Task):
         (%s, %s, %s, %s, %s, %s, %s, %s)
     """
     values = (
-        str(task.uuid),
+        task.uuid,
         task.title,
         task.content,
         task.status,
@@ -94,13 +95,14 @@ def update(task: Task):
         task.priority,
         task.duedate,
         task.updated_at,
-        str(task.uuid)
+        task.uuid
     )
 
-    query_execute(query=query, values=values)
+    with DatabaseConnector() as cur:
+        cur.execute(query=query, vars=values)
 
 
-def delete(task_id):
+def delete(task_id: UUID):
     query = """
     DELETE FROM
         tasks
@@ -108,4 +110,6 @@ def delete(task_id):
         id = %s
     """
     values = (task_id, )
-    query_execute(query=query, values=values)
+    
+    with DatabaseConnector() as cur:
+        cur.execute(query=query, vars=values)
