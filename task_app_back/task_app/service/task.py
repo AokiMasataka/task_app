@@ -12,16 +12,16 @@ __all__ = [
 ]
 
 
-def get_tasks_with_status(status: int = None) -> list[dict]:
+def get_tasks_with_status(project_id: UUID, status: int = None) -> list[dict]:
     query = """
     SELECT
         title, content, id, status, priority, duedate, created_at, updated_at
     FROM
         tasks
     WHERE
-        status = %s
+        project_id = %s AND status = %s
     """
-    values = (status, )
+    values = (project_id, status)
 
     with DatabaseConnector() as cur:
         cur.execute(query=query, vars=values)
@@ -32,16 +32,16 @@ def get_tasks_with_status(status: int = None) -> list[dict]:
     return tasks
 
 
-def get(task_id: UUID):
+def get(project_id: UUID, task_id: UUID):
     query = """
     SELECT
         title, content, id, status, priority, duedate, created_at, updated_at
     FROM
         tasks
     WHERE
-        id = %s
+        project_id = %s AND id = %s
     """
-    values = (task_id,)
+    values = (project_id, task_id)
 
     with DatabaseConnector() as cur:
         cur.execute(query=query, vars=values)
@@ -55,12 +55,13 @@ def create(task: Task):
     
     query = """
     INSERT INTO tasks
-        (id, title, content, status, priority, duedate, created_at, updated_at)
+        (id, project_id, title, content, status, priority, duedate, created_at, updated_at)
     VALUES
-        (%s, %s, %s, %s, %s, %s, %s, %s)
+        (%s, %s, %s, %s, %s, %s, %s, %s, %s)
     """
     values = (
         task.uuid,
+        task.project_id,
         task.title,
         task.content,
         task.status,
@@ -86,7 +87,7 @@ def update(task: Task):
         duedate = %s,
         updated_at = %s
     WHERE
-        id = %s
+        project_id = %s AND id = %s
     """
     values = (
         task.title,
@@ -95,6 +96,7 @@ def update(task: Task):
         task.priority,
         task.duedate,
         task.updated_at,
+        task.project_id,
         task.uuid
     )
 
@@ -102,14 +104,14 @@ def update(task: Task):
         cur.execute(query=query, vars=values)
 
 
-def delete(task_id: UUID):
+def delete(project_id: UUID, task_id: UUID):
     query = """
     DELETE FROM
         tasks
     WHERE
-        id = %s
+        project_id = %s AND id = %s
     """
-    values = (task_id, )
+    values = (project_id,  task_id)
     
     with DatabaseConnector() as cur:
         cur.execute(query=query, vars=values)

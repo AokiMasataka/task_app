@@ -35,13 +35,14 @@ def get(project_id: UUID) -> Project:
     )
 
 
-def update(project_id: UUID, title: str, description: str) -> None:
+def update(project_id: UUID, title: str, description: str) -> Project:
     updated_project = Project.new_update(
         project_id=project_id,
         title=title,
         description=description
     )
     project.update(project=updated_project)
+    return updated_project
 
 
 def delete(project_id: UUID) -> None:

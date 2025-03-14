@@ -6,10 +6,9 @@ from .task_schema import (
     TaskCreateRequest,
     TaskCreateResponse,
     TaskGetAllResponse,
-
+    TaskUpdateRequest
 )
-from ...domain import task
-
+from ... import domain
 
 logger = getLogger("uvicorn.app")
 app = APIRouter()
@@ -21,7 +20,15 @@ app = APIRouter()
     response_model=TaskCreateResponse,
 )
 def create_task(project_id: UUID, create_request: TaskCreateRequest):
-    pass
+    cretaed_task_id = domain.task.create(
+        project_id=project_id,
+        title=create_request.title,
+        content=create_request.content,
+        status=create_request.status,
+        priority=create_request.priority,
+        duedate=create_request.duedate
+    )
+    return TaskCreateResponse(task_id=cretaed_task_id)
 
 
 @app.get(
@@ -39,7 +46,7 @@ def get_task(project_id: UUID, task_id:  UUID):
 
 
 @app.put("/project/{project_id}/tasks/{task_id}", status_code=200)
-def update_task(project_id: UUID, task_id:  UUID, create_request: UpdateRequest):
+def update_task(project_id: UUID, task_id:  UUID, create_request: TaskUpdateRequest):
     pass
 
 
