@@ -11,6 +11,7 @@
     "marked": "npm:marked@^15.0.5",
     "postcss": "npm:postcss@^8.4.49",
     "tailwindcss": "npm:tailwindcss@^3.4.16",
+    "vue-router": "npm:vue-router@^4.5.0",
     "vuetify": "npm:vuetify@3"
   }
 }

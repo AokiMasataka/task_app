@@ -21,3 +21,12 @@ export const CreateInitTaskData = (status: number): Task => {
         duedate: null
     };
 };
+
+
+export type Project = {
+    id: string,
+    title: string,
+    description: string
+};
+
+export type Projects = Project[];

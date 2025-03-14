@@ -2,13 +2,13 @@
     <v-app>
         <v-main>
             <Header></Header>
-            <!-- <SideBer></SideBer> -->
-            <TasksView></TasksView>
+            <Sidebar></Sidebar>
+            <router-view/>
         </v-main>
     </v-app>
 </template>
 
 <script setup lang="ts">
 import Header from './components/Header';
-import TasksView from './views/TasksView';
+import Sidebar from './components/Sidebar';
 </script>
