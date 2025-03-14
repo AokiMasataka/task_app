@@ -1,0 +1,5 @@
+{
+  "imports": {
+    "vue-router": "npm:vue-router@^4.5.0"
+  }
+}
