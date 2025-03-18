@@ -1,14 +1,14 @@
-from typing import List
+from typing import List, Union
 from uuid import UUID
 from pydantic import BaseModel
 
 
-class ProjectCreationRequest(BaseModel):
+class ProjectCreateRequest(BaseModel):
     title: str
-    description: str
+    description: Union[str, None]
 
 
-class ProjectCreationResponse(BaseModel):
+class ProjectCreateResponse(BaseModel):
     project_id: UUID
 
 
@@ -27,7 +27,7 @@ class ProjestGetAllResponse(BaseModel):
 
 class ProjectUpdateRequest(BaseModel):
     title: str
-    description: str
+    description: Union[str, None]
 
 
 class ProjectUpdateResponse(BaseModel):

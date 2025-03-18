@@ -15,7 +15,7 @@ export async function fetchTasksAPI(
     );
     const rawTasks: (Omit<Task, "duedate"> & { duedate: string | null })[] = (
         await response.json()
-    ).tasks;
+    ).results;
     const tasks = rawTasks.map((t) => {
         return {
             ...t,
@@ -49,8 +49,7 @@ async function modifyTask(
     task: Task,
     method: "POST" | "PUT"
 ) {
-    const path =
-        method === "POST" ? "/task" : `projects/${projectId}/tasks/${task.id}`;
+    const path = method === "POST" ? `/projects/${projectId}/tasks` : `/projects/${projectId}/tasks/${task.id}`;
     const requestUrl = new URL(path, `http://${HOST}:${PORT}`);
     await fetch(requestUrl, {
         method: method,

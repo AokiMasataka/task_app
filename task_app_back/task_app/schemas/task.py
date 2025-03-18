@@ -14,10 +14,10 @@ PRIORITY_HIGH = 2
 
 @dataclasses.dataclass
 class Task:
+    id: UUID
     project_id: UUID
     title: str
     content: str
-    uuid: UUID
     status: int = STATUS_TODO
     priority: int = PRIORITY_LOW
     duedate: datetime.date | None = None
@@ -41,7 +41,7 @@ class Task:
         duedate: datetime.date | None = None
     ) -> "Task":
         return Task(
-            uuid=uuid4(),
+            id=uuid4(),
             project_id=project_id,
             title=title,
             content=content,

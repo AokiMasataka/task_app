@@ -53,12 +53,14 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useRoute } from "vue-router";
 import { fetchTaskAPI } from '../../scripts/taskApi';
 import { CreateInitTaskData, Task, Tasks } from '../../scripts/types';
 import AddTaskBtn from '../AddTaskBtn';
 import TaskCard from '../TaskCard';
 import TaskForm from '../TaskForm';
 
+const projectId = useRoute().params.projectId as string;
 
 const draggingModel = defineModel<Task | null>("draggingTask", {required: true});
 const props = defineProps<{
@@ -112,6 +114,7 @@ function handleTaskDrop(event: DragEvent): void {
 
     const updateParams = {
         id: draggingModel.value.id,
+        project_id: draggingModel.value.project_id,
         title: draggingModel.value.title,
         content: draggingModel.value.content,
         status: props.valueStatus,
@@ -141,7 +144,7 @@ async function handleFecthTask(task_id: string, isPreviewMode: boolean): Promise
     isActivateForm.value = true;
 
     try {
-        formProps.value.initTaskData = await fetchTaskAPI(task_id);
+        formProps.value.initTaskData = await fetchTaskAPI(projectId, task_id);
     } finally {
         isLoading.value = false;
     };

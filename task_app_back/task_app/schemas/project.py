@@ -5,7 +5,7 @@ from uuid import UUID, uuid4
 
 @dataclasses.dataclass
 class Project:
-    uuid: UUID
+    id: UUID
     title: str
     description: str
     created_at: datetime.datetime | None = None
@@ -14,7 +14,7 @@ class Project:
     @staticmethod
     def new(title: str, description: str) -> "Project":
         project = Project(
-            uuid=uuid4(),
+            id=uuid4(),
             title=title,
             description=description,
             created_at=datetime.datetime.now(),
@@ -23,9 +23,9 @@ class Project:
         return project
 
     @staticmethod
-    def new_update(project_id: UUID, title: str, description: str) -> "Project":
+    def new_update(id: UUID, title: str, description: str) -> "Project":
         project = Project(
-            uuid=project_id,
+            id=id,
             title=title,
             description=description,
             created_at=None,

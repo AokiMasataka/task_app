@@ -22,23 +22,41 @@ def create(
     )
 
     task_service.create(task=new_task)
-    return new_task.uuid
+    return new_task.id
 
 
 def get_tasks_with_status(project_id: UUID, status: int) -> List[Task]:
     tasks = task_service.get_tasks_with_status(project_id=project_id, status=status)
-    tasks = [Task(**task) for task in tasks]
+    tasks = [Task(**task, project_id=project_id) for task in tasks]
     return tasks
 
 
 def get(project_id: UUID, task_id: UUID) -> Task:
     task = task_service.get(project_id=project_id, task_id=task_id)
-    task = Task(**task)
+    task = Task(**task, project_id=project_id)
     return task
 
 
-def update(task: Task) -> None:
-    task_service.update(task=task)
+def update(
+    task_id: UUID,
+    project_id: UUID,
+    title: str,
+    content: str,
+    status: str,
+    priority: int,
+    duedate: Union[str, None] = None
+) -> Task:
+    updated_task = Task(
+        id=task_id,
+        project_id=project_id,
+        title=title,
+        content=content,
+        status=status,
+        priority=priority,
+        duedate=duedate
+    )
+    task_service.update(task=updated_task)
+    return updated_task
 
 
 def delete(project_id: UUID, task_id: UUID) -> None:

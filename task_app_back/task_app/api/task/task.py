@@ -6,7 +6,9 @@ from .task_schema import (
     TaskCreateRequest,
     TaskCreateResponse,
     TaskGetAllResponse,
-    TaskUpdateRequest
+    TaskGetResponse,
+    TaskUpdateRequest,
+    TaskUpdateResponse
 )
 from ... import domain
 
@@ -15,7 +17,7 @@ app = APIRouter()
 
 
 @app.post(
-    "/project/{project_id}/tasks",
+    "/projects/{project_id}/tasks",
     status_code=201,
     response_model=TaskCreateResponse,
 )
@@ -32,24 +34,69 @@ def create_task(project_id: UUID, create_request: TaskCreateRequest):
 
 
 @app.get(
-    "/project/{project_id}/tasks",
+    "/projects/{project_id}/tasks",
     status_code=200,
     response_model=TaskGetAllResponse
 )
 def get_tasks(project_id: UUID, status: int = 0):
-    pass
+    tasks = domain.task.get_tasks_with_status(project_id=project_id, status=status)
+
+    tasks = [
+        TaskGetResponse(
+            id=task.id,
+            project_id=task.project_id,
+            title=task.title,
+            content=task.content,
+            status=task.status,
+            priority=task.priority,
+            duedate=task.duedate
+        ) for task in tasks
+    ]
+
+    return TaskGetAllResponse(results=tasks, count=len(tasks), next=None, prev=None)
 
 
-@app.get("/project/{project_id}/tasks/{task_id}", status_code=200)
+@app.get("/projects/{project_id}/tasks/{task_id}", status_code=200)
 def get_task(project_id: UUID, task_id:  UUID):
-    pass
+    task = domain.task.get(project_id=project_id, task_id=task_id)
+    return TaskGetResponse(
+        id=task.id,
+        project_id=task.project_id,
+        title=task.title,
+        content=task.content,
+        status=task.status,
+        priority=task.priority,
+        duedate=task.duedate
+    )
 
 
-@app.put("/project/{project_id}/tasks/{task_id}", status_code=200)
-def update_task(project_id: UUID, task_id:  UUID, create_request: TaskUpdateRequest):
-    pass
+@app.put(
+    "/projects/{project_id}/tasks/{task_id}",
+    status_code=200,
+    response_model=TaskUpdateResponse
+)
+def update_task(project_id: UUID, task_id:  UUID, update_request: TaskUpdateRequest):
+    updated_task = domain.task.update(
+        task_id=task_id,
+        project_id=project_id,
+        title=update_request.title,
+        content=update_request.content,
+        status=update_request.status,
+        priority=update_request.priority,
+        duedate=update_request.duedate
+    )
+
+    return TaskUpdateResponse(
+        id=updated_task.id,
+        project_id=updated_task.project_id,
+        title=updated_task.title,
+        content=updated_task.content,
+        status=updated_task.status,
+        priority=updated_task.priority,
+        duedate=updated_task.duedate
+    )
 
 
-@app.delete("/project/{project_id}/tasks/{task_id}", status_code=200)
+@app.delete("/projects/{project_id}/tasks/{task_id}", status_code=204)
 def delete_task(project_id: UUID, task_id:  UUID):
-    pass
+    domain.task.delete(project_id=project_id, task_id=task_id)

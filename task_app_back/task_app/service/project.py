@@ -11,7 +11,7 @@ def create(project: Project) -> None:
         (%s, %s, %s, %s, %s)
     """
     values = (
-        project.uuid,
+        project.id,
         project.title,
         project.description,
         project.created_at,
@@ -71,7 +71,7 @@ def update(project: Project) -> None:
         project.title,
         project.description,
         project.updated_at,
-        project.uuid
+        project.id
     )
 
     with DatabaseConnector() as cur:

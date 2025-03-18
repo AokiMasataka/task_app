@@ -8,14 +8,14 @@ from ..service import project
 def create(title: str, description: str) -> UUID:
     new_project = Project.new(title=title, description=description)
     project.create(new_project)
-    return new_project.uuid
+    return new_project.id
 
 
 def get_all() -> List[Project]:
     dict_projects = project.get_all()
     projects = [
         Project(
-            uuid=dict_project["id"],
+            id=dict_project["id"],
             title=dict_project["title"],
             description=dict_project["description"],
             created_at=dict_project["created_at"],
@@ -27,7 +27,7 @@ def get_all() -> List[Project]:
 def get(project_id: UUID) -> Project:
     dict_project = project.get(project_id=project_id)
     return Project(
-        uuid=dict_project["id"],
+        id=dict_project["id"],
         title=dict_project["title"],
         description=dict_project["description"],
         created_at=dict_project["created_at"],
@@ -37,7 +37,7 @@ def get(project_id: UUID) -> Project:
 
 def update(project_id: UUID, title: str, description: str) -> Project:
     updated_project = Project.new_update(
-        project_id=project_id,
+        id=project_id,
         title=title,
         description=description
     )

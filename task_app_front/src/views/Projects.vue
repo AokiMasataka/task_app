@@ -1,6 +1,9 @@
 <template>
     <div class="mx-8 my-4">
-        <v-btn class="my-4" @click="dialog = true">New Project</v-btn>
+        <v-btn
+            class="my-4"
+            @click="dialog = true"
+        >New Project</v-btn>
 
         <v-data-table-server
             :items="projects"
@@ -20,20 +23,45 @@
                     />
                     <v-icon
                         :icon="Trash"
-                        @click.stop="console.log(item.title)"
+                        @click.stop="deleteProject(item.id)"
                     />
                 </div>
             </template>
         </v-data-table-server>
 
         <v-dialog v-model="dialog" width="800">
-            <v-card title="aaaaa">
-                <v-text-field
-                    v-model="createProjectProps.title"
-                    variant="solo-filled"
-                    placeholder="input title"
-                    required
-                />
+            <v-card title="Create New Project">
+
+                <v-card-text class="mx-8">
+                    <v-text-field
+                        v-model="createProjectProps.title"
+                        label="Project title"
+                        variant="solo-filled"
+                        placeholder="input title"
+                        required
+                    />
+                    <v-text-field
+                        v-model="createProjectProps.description"
+                        label="Project description"
+                        variant="solo-filled"
+                        placeholder="input title"
+                        required
+                    />
+                </v-card-text>
+
+                <v-card-actions class="px-8">
+                    <v-btn
+                        text="Close"
+                        variant="plain"
+                        @click="dialog = false"
+                    />
+                    <v-btn
+                        color="primary"
+                        text="Save"
+                        variant="tonal"
+                        @click="cretaeProject"
+                    />
+                </v-card-actions>
             </v-card>
         </v-dialog>
     </div>
@@ -51,7 +79,6 @@ import {
 } from "../scripts/projectApi";
 import { Project, Projects } from "../scripts/types";
 
-const itemsPerPage = ref(5);
 const loading = ref(false);
 const router = useRouter();
 const projects = ref<Projects>([]);
@@ -76,12 +103,17 @@ async function fetchProjects() {
 
 async function cretaeProject() {
     await createProjectAPI(createProjectProps.value);
+    dialog.value = false;
     await fetchProjects();
 }
 
-async function deleteProject() {
-    await deleteProjectAPI("aa");
+async function deleteProject(id: string) {
+    await deleteProjectAPI(id);
     await fetchProjects();
+}
+
+async function updateProject(id: string) {
+    console.log(`update Project: ${id}`)
 }
 
 function handleClick(event, row) {

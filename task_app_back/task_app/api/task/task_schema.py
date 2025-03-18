@@ -1,5 +1,6 @@
 from typing import Union, List
 from uuid import UUID
+from datetime import date
 from pydantic import BaseModel
 
 
@@ -8,7 +9,7 @@ class TaskCreateRequest(BaseModel):
     content: str
     status: int
     priority: int
-    duedate: Union[str, None] = None
+    duedate: Union[date, None] = None
 
 
 class TaskCreateResponse(BaseModel):
@@ -17,11 +18,12 @@ class TaskCreateResponse(BaseModel):
 
 class TaskGetResponse(BaseModel):
     id: UUID
+    project_id: UUID
     title: str
     content: str
     status: int
     priority: int
-    duedate: Union[str, None] = None
+    duedate: Union[date, None] = None
 
 
 class TaskGetAllResponse(BaseModel):
@@ -36,13 +38,14 @@ class TaskUpdateRequest(BaseModel):
     content: str
     status: int
     priority: int
-    duedate: Union[str, None] = None
+    duedate: Union[date, None] = None
 
 
 class TaskUpdateResponse(BaseModel):
     id: UUID
+    project_id: UUID
     title: str
     content: str
     status: int
     priority: int
-    duedate: Union[str, None] = None
+    duedate: Union[date, None] = None

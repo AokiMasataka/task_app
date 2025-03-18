@@ -82,18 +82,18 @@ async function fetchTasks() {
 }
 
 async function createTask(task: Task): Promise<void> {
-    await postTaskAPI(task);
+    await postTaskAPI(projectId, task);
     await fetchTasks();
 }
 
 async function updateTask(task: Task): Promise<void> {
-    await updateTaskAPI(task);
+    await updateTaskAPI(projectId, task);
     await fetchTasks();
     emphasislStatus.value = null;
 }
 
 async function deleteTask(task_id: string): Promise<void> {
-    await deleteTaskAPI(task_id);
+    await deleteTaskAPI(projectId, task_id);
     await fetchTasks();
 }
 

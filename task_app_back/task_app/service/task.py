@@ -15,7 +15,7 @@ __all__ = [
 def get_tasks_with_status(project_id: UUID, status: int = None) -> list[dict]:
     query = """
     SELECT
-        title, content, id, status, priority, duedate, created_at, updated_at
+        id, title, content, status, priority, duedate, created_at, updated_at
     FROM
         tasks
     WHERE
@@ -35,7 +35,7 @@ def get_tasks_with_status(project_id: UUID, status: int = None) -> list[dict]:
 def get(project_id: UUID, task_id: UUID):
     query = """
     SELECT
-        title, content, id, status, priority, duedate, created_at, updated_at
+        id, title, content, status, priority, duedate, created_at, updated_at
     FROM
         tasks
     WHERE
@@ -60,7 +60,7 @@ def create(task: Task):
         (%s, %s, %s, %s, %s, %s, %s, %s, %s)
     """
     values = (
-        task.uuid,
+        task.id,
         task.project_id,
         task.title,
         task.content,
@@ -97,7 +97,7 @@ def update(task: Task):
         task.duedate,
         task.updated_at,
         task.project_id,
-        task.uuid
+        task.id
     )
 
     with DatabaseConnector() as cur:

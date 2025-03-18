@@ -64,7 +64,7 @@ services:
       - POSTGRES_USER=${PGSQL_USER}
       - POSTGRES_PASSWORD=${PGSQL_PASS}
       - POSTGRES_DB=${PGSQL_NAME}
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${PGSQL_USER}"]
-      interval: 2s
-      retries: 5
+    # healthcheck:
+    #   test: ["CMD-SHELL", "pg_isready -U ${PGSQL_USER}"]
+    #   interval: 2s
+    #   retries: 5
