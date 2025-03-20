@@ -1,4 +1,5 @@
 <template>
+    <h1 class="mx-10 my-4 text-3xl">{{ ProjectName }}</h1>
     <div class="flex justify-between h-lvh mx-8">
         <TaskList
             v-model:draggingTask="draggingTask"
@@ -59,6 +60,7 @@ import {
 import { Task, Tasks } from "../scripts/types";
 
 const projectId = useRoute().params.projectId as string;
+const ProjectName = "Sample Project";
 
 const fetchedTasks = ref<{
     todo: Tasks;

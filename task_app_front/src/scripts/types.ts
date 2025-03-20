@@ -1,4 +1,9 @@
-export type TaskForShow = Omit<Task, "status"> & {status: {state: string, value: number}}
+// export type TaskForShow = Omit<Task, "status"> & {
+//     status: { state: string; value: number };
+// };
+
+export type TaskID = string;
+export type ProjectID = string;
 
 export type Task = {
     id: string;
@@ -20,15 +25,14 @@ export const CreateInitTaskData = (status: number): Task => {
         content: "",
         status: status,
         priority: 0,
-        duedate: null
+        duedate: null,
     };
 };
 
-
 export type Project = {
-    id: string,
-    title: string,
-    description: string
+    id: string;
+    title: string;
+    description: string;
 };
 
 export type Projects = Project[];

@@ -4,7 +4,6 @@ from ..schemas import Project
 from ..service import project
 
 
-
 def create(title: str, description: str) -> UUID:
     new_project = Project.new(title=title, description=description)
     project.create(new_project)

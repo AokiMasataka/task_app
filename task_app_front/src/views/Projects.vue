@@ -1,9 +1,6 @@
 <template>
     <div class="mx-8 my-4">
-        <v-btn
-            class="my-4"
-            @click="dialog = true"
-        >New Project</v-btn>
+        <v-btn class="my-4" @click="dialog = true">New Project</v-btn>
 
         <v-data-table-server
             :items="projects"
@@ -17,10 +14,7 @@
         >
             <template v-slot:item.actions="{ item }">
                 <div class="d-flex ga-2 justify-end">
-                    <v-icon
-                        :icon="Pencil"
-                        @click.stop="console.log(item.title)"
-                    />
+                    <v-icon :icon="Pencil" @click.stop="dialog = true" />
                     <v-icon
                         :icon="Trash"
                         @click.stop="deleteProject(item.id)"
@@ -31,7 +25,6 @@
 
         <v-dialog v-model="dialog" width="800">
             <v-card title="Create New Project">
-
                 <v-card-text class="mx-8">
                     <v-text-field
                         v-model="createProjectProps.title"
@@ -113,7 +106,7 @@ async function deleteProject(id: string) {
 }
 
 async function updateProject(id: string) {
-    console.log(`update Project: ${id}`)
+    console.log(`update Project: ${id}`);
 }
 
 function handleClick(event, row) {
