@@ -31,6 +31,7 @@
                 />
 
                 <DeleteBtn
+                    title="Delete Task?"
                     @on-delete="$emit('onDelete')"
                 />
             </div>
@@ -39,23 +40,23 @@
 </template>
 
 <script setup lang="ts">
-import { Task } from '../../scripts/types';
-import DeleteBtn from '../DeleteBtn';
-import UpdateBtn from '../UpdateBtn';
+import { Task } from "../../scripts/types";
+import DeleteBtn from "../DeleteBtn";
+import UpdateBtn from "../UpdateBtn";
 
-const props = defineProps<{task: Task}>();
+const props = defineProps<{ task: Task }>();
 defineEmits<{
-    (e: 'handleFecthTask', task_id: string, isPreviewMode: boolean): unknown,
-    (e: 'onDragStart', task: Task): unknown,
-    (e: 'onDragEnd'): unknown,
-    (e: 'onDelete'): unknown
+    (e: "handleFecthTask", task_id: string, isPreviewMode: boolean): unknown;
+    (e: "onDragStart", task: Task): unknown;
+    (e: "onDragEnd"): unknown;
+    (e: "onDelete"): unknown;
 }>();
 
 function isEmptyContent(content: string): string {
     if (content == "") {
-        return "no content"
+        return "no content";
     } else {
         return content;
-    };
-};
+    }
+}
 </script>

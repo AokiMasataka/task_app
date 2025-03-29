@@ -1,6 +1,6 @@
 <template>
     <div class="mx-8 my-4">
-        <v-btn class="my-4" @click="dialog = true">New Project</v-btn>
+        <v-btn class="my-4" @click="openCreateForm">New Project</v-btn>
 
         <v-data-table-server
             :items="projects"
@@ -14,48 +14,27 @@
         >
             <template v-slot:item.actions="{ item }">
                 <div class="d-flex ga-2 justify-end">
-                    <v-icon :icon="Pencil" @click.stop="dialog = true" />
-                    <v-icon
-                        :icon="Trash"
-                        @click.stop="deleteProject(item.id)"
-                    />
+                    <v-icon :icon="Pencil" @click.stop="openUpdateForm(item)" />
+                    <v-icon :icon="Trash" @click.stop="openDeleteForm(item)" />
                 </div>
             </template>
         </v-data-table-server>
 
         <v-dialog v-model="dialog" width="800">
-            <v-card title="Create New Project">
-                <v-card-text class="mx-8">
-                    <v-text-field
-                        v-model="createProjectProps.title"
-                        label="Project title"
-                        variant="solo-filled"
-                        placeholder="input title"
-                        required
-                    />
-                    <v-text-field
-                        v-model="createProjectProps.description"
-                        label="Project description"
-                        variant="solo-filled"
-                        placeholder="input title"
-                        required
-                    />
-                </v-card-text>
+            <ProjectForm
+                :title="formProps.formTitle"
+                v-model="formProps.project"
+                @on-close="closeForm"
+                @on-save="formProps.onSave"
+            />
+        </v-dialog>
 
-                <v-card-actions class="px-8">
-                    <v-btn
-                        text="Close"
-                        variant="plain"
-                        @click="dialog = false"
-                    />
-                    <v-btn
-                        color="primary"
-                        text="Save"
-                        variant="tonal"
-                        @click="cretaeProject"
-                    />
-                </v-card-actions>
-            </v-card>
+        <v-dialog v-model="deleteDialog" width="800">
+            <DeleteForm
+                title="Delete Project?"
+                @on-close="closeDeleteForm"
+                @on-delete="deleteProject"
+            />
         </v-dialog>
     </div>
 </template>
@@ -63,12 +42,15 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
+import DeleteForm from "../components/DeleteForm";
 import Pencil from "../components/icons/Pencil.vue";
 import Trash from "../components/icons/Trash.vue";
+import ProjectForm from "../components/ProjectForm";
 import {
     createProjectAPI,
     deleteProjectAPI,
     fetchProjectsAPI,
+    updateProjectAPI,
 } from "../scripts/projectApi";
 import { Project, Projects } from "../scripts/types";
 
@@ -77,7 +59,17 @@ const router = useRouter();
 const projects = ref<Projects>([]);
 
 const dialog = ref<boolean>(false);
-const createProjectProps = ref<Project>({ id: "", title: "", description: "" });
+const deleteDialog = ref<boolean>(false);
+
+const formProps = ref<{
+    formTitle: string;
+    project: Project;
+    onSave: () => {};
+}>({
+    formTitle: "",
+    project: { id: "", title: "", description: "" },
+    onSave: async () => {},
+});
 
 const headers = [
     { title: "title", value: "title", align: "end" },
@@ -94,19 +86,40 @@ async function fetchProjects() {
     }
 }
 
-async function cretaeProject() {
-    await createProjectAPI(createProjectProps.value);
+function openCreateForm() {
+    formProps.value.formTitle = "Create New Project";
+    formProps.value.project = { id: "", title: "", description: "" };
+    formProps.value.onSave = cretaeProject;
+    dialog.value = true;
+}
+
+function openUpdateForm(project: Project) {
+    formProps.value.formTitle = "Update Project";
+    formProps.value.project = { ...project };
+    formProps.value.onSave = updateProject;
+    dialog.value = true;
+}
+
+function closeForm() {
     dialog.value = false;
-    await fetchProjects();
 }
 
-async function deleteProject(id: string) {
-    await deleteProjectAPI(id);
+async function cretaeProject() {
+    await createProjectAPI(formProps.value.project);
     await fetchProjects();
+    dialog.value = false;
 }
 
-async function updateProject(id: string) {
-    console.log(`update Project: ${id}`);
+async function updateProject() {
+    await updateProjectAPI(formProps.value.project);
+    await fetchProjects();
+    dialog.value = false;
+}
+
+async function deleteProject() {
+    await deleteProjectAPI(formProps.value.project.id);
+    await fetchProjects();
+    deleteDialog.value = false;
 }
 
 function handleClick(event, row) {
@@ -114,7 +127,14 @@ function handleClick(event, row) {
     router.push({ path: `/projects/${id}/tasks` });
 }
 
-function clickEdit(item: Project) {}
+function openDeleteForm(project: Project) {
+    formProps.value.project = { ...project };
+    deleteDialog.value = true;
+}
+
+function closeDeleteForm() {
+    deleteDialog.value = false;
+}
 
 onMounted(fetchProjects);
 </script>
