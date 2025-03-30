@@ -1,6 +1,7 @@
+from typing import List
 from uuid import UUID
-from ..schemas import Task
 from .utils import DatabaseConnector
+from ..schemas import Task
 
 
 __all__ = [
@@ -12,7 +13,7 @@ __all__ = [
 ]
 
 
-def get_tasks_with_status(project_id: UUID, status: int = None) -> list[dict]:
+def get_tasks_with_status(project_id: UUID, status: int = None) -> List[dict]:
     query = """
     SELECT
         id, title, content, status, priority, duedate, created_at, updated_at
@@ -32,7 +33,7 @@ def get_tasks_with_status(project_id: UUID, status: int = None) -> list[dict]:
     return tasks
 
 
-def get(project_id: UUID, task_id: UUID):
+def get(project_id: UUID, task_id: UUID) -> dict:
     query = """
     SELECT
         id, title, content, status, priority, duedate, created_at, updated_at

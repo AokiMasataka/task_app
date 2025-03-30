@@ -13,16 +13,16 @@ from .task_schema import (
 from ... import domain
 
 logger = getLogger("uvicorn.app")
-app = APIRouter()
+router = APIRouter()
 
 
-@app.post(
+@router.post(
     "/projects/{project_id}/tasks",
     status_code=201,
     response_model=TaskCreateResponse,
 )
 def create_task(project_id: UUID, create_request: TaskCreateRequest):
-    cretaed_task_id = domain.task.create(
+    task_id = domain.task.create(
         project_id=project_id,
         title=create_request.title,
         content=create_request.content,
@@ -30,10 +30,10 @@ def create_task(project_id: UUID, create_request: TaskCreateRequest):
         priority=create_request.priority,
         duedate=create_request.duedate
     )
-    return TaskCreateResponse(task_id=cretaed_task_id)
+    return TaskCreateResponse(id=task_id)
 
 
-@app.get(
+@router.get(
     "/projects/{project_id}/tasks",
     status_code=200,
     response_model=TaskGetAllResponse
@@ -56,7 +56,7 @@ def get_tasks(project_id: UUID, status: int = 0):
     return TaskGetAllResponse(results=tasks, count=len(tasks), next=None, prev=None)
 
 
-@app.get("/projects/{project_id}/tasks/{task_id}", status_code=200)
+@router.get("/projects/{project_id}/tasks/{task_id}", status_code=200)
 def get_task(project_id: UUID, task_id:  UUID):
     task = domain.task.get(project_id=project_id, task_id=task_id)
     return TaskGetResponse(
@@ -70,7 +70,7 @@ def get_task(project_id: UUID, task_id:  UUID):
     )
 
 
-@app.put(
+@router.put(
     "/projects/{project_id}/tasks/{task_id}",
     status_code=200,
     response_model=TaskUpdateResponse
@@ -97,6 +97,6 @@ def update_task(project_id: UUID, task_id:  UUID, update_request: TaskUpdateRequ
     )
 
 
-@app.delete("/projects/{project_id}/tasks/{task_id}", status_code=204)
+@router.delete("/projects/{project_id}/tasks/{task_id}", status_code=204)
 def delete_task(project_id: UUID, task_id:  UUID):
     domain.task.delete(project_id=project_id, task_id=task_id)

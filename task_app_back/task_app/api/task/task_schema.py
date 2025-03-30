@@ -13,7 +13,7 @@ class TaskCreateRequest(BaseModel):
 
 
 class TaskCreateResponse(BaseModel):
-    task_id: UUID
+    id: UUID
 
 
 class TaskGetResponse(BaseModel):
@@ -29,8 +29,8 @@ class TaskGetResponse(BaseModel):
 class TaskGetAllResponse(BaseModel):
     results: List[TaskGetResponse]
     count: int
-    next: None | str
-    prev: None | str
+    next: Union[str, None] = None
+    prev: Union[str, None] = None
 
 
 class TaskUpdateRequest(BaseModel):

@@ -9,7 +9,7 @@ class ProjectCreateRequest(BaseModel):
 
 
 class ProjectCreateResponse(BaseModel):
-    project_id: UUID
+    id: UUID
 
 
 class ProjectGetResopnse(BaseModel):

@@ -15,17 +15,17 @@ from ... import domain
 
 
 logger = getLogger("uvicorn.app")
-app = APIRouter()
+router = APIRouter()
 
 # TODO: Errorハンドリング
 
-@app.post("/projects", status_code=201, response_model=ProjectCreateResponse)
+@router.post("/projects", status_code=201, response_model=ProjectCreateResponse)
 def create_project(create_request: ProjectCreateRequest):
     project_id = domain.project.create(create_request.title, create_request.description)
-    return ProjectCreateResponse(project_id=project_id)
+    return ProjectCreateResponse(id=project_id)
 
 
-@app.get("/projects", status_code=200, response_model=ProjestGetAllResponse)
+@router.get("/projects", status_code=200, response_model=ProjestGetAllResponse)
 def get_projects():
     results = [
         ProjectGetResopnse(
@@ -37,7 +37,7 @@ def get_projects():
     return ProjestGetAllResponse(results=results, count=len(results), next=None, prev=None)
 
 
-@app.get("/projects/{project_id}", status_code=200, response_model=ProjectGetResopnse)
+@router.get("/projects/{project_id}", status_code=200, response_model=ProjectGetResopnse)
 def get_project(project_id: UUID):
     project = domain.project.get(project_id=project_id)
     return ProjectGetResopnse(
@@ -47,7 +47,7 @@ def get_project(project_id: UUID):
     )
 
 
-@app.put("/projects/{project_id}", status_code=200, response_model=ProjectUpdateResponse)
+@router.put("/projects/{project_id}", status_code=200, response_model=ProjectUpdateResponse)
 def update_project(project_id: UUID, update_request: ProjectUpdateRequest):
     updateed_project = domain.project.update(
         project_id=project_id,
@@ -61,7 +61,7 @@ def update_project(project_id: UUID, update_request: ProjectUpdateRequest):
     )
 
 
-@app.delete("/projects/{project_id}", status_code=204)
+@router.delete("/projects/{project_id}", status_code=204)
 def delete_project(project_id: UUID):
     domain.project.delete(
         project_id=project_id

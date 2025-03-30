@@ -2,9 +2,22 @@
 //     status: { state: string; value: number };
 // };
 
-export type TaskID = string;
 export type ProjectID = string;
+export type TaskID = string;
+export type DocID = string;
 
+
+// Project types
+export type Project = {
+    id: string;
+    title: string;
+    description: string;
+};
+
+export type Projects = Project[];
+
+
+// Task types
 export type Task = {
     id: string;
     project_id: string;
@@ -29,10 +42,21 @@ export const CreateInitTaskData = (status: number): Task => {
     };
 };
 
-export type Project = {
+
+// Doc types
+export type Doc = {
     id: string;
+    project_id: string;
     title: string;
-    description: string;
+    content: string;
 };
 
-export type Projects = Project[];
+export type Docs = Doc[];
+
+
+export type AllItems<T> = {
+    count: number;
+    prev: string | null;
+    next: string | null;
+    results: T[]
+}
