@@ -8,7 +8,7 @@ NAME = os.environ["PGSQL_USER"]
 PASS = os.environ["PGSQL_PASS"]
 HOST = os.environ["PGSQL_HOST"]
 PORT = os.environ["PGSQL_PORT"]
-DB_NAME = os.environ["PGSQL_NAME"]
+DB_NAME = os.environ["PGSQL_DB"]
 DEFAULT_DATABASE_CURSOR_OPTION = {"cursor_factory": psycopg2.extras.DictCursor}
 
 
