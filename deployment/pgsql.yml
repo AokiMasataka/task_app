@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy-task-app-pgsql
+  labels:
+    name: task-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deploy-task-app-pgsql
+  template:
+    metadata:
+      labels:
+        app: deploy-task-app-pgsql
+    spec:
+      containers:
+        - name: deploy-task-app-pgsql
+          image: task-app-pgsql:dev
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - configMapRef:
+                name: config-pgsql
+      # volumes:
+      #   - name: init-sql
+      #     configMap:
+      #       name: pgsql-init-sql
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-task-app-pgsql
+spec:
+  type: NodePort
+  selector:
+    app: deploy-task-app-pgsql
+  ports:
+    - port: 5432
+      targetPort: 5432
+      protocol: TCP
+      name: svc-task-app-pgsql
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-pgsql
+  labels:
+    name: task-app
+data:
+  POSTGRES_USER: "pgsql"
+  POSTGRES_PASSWORD: "password"
+  POSTGRES_DB: "pgsql"
