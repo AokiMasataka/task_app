@@ -22,17 +22,35 @@ services:
 
   backend:
     build: task_app_back
+    image: task-app-backend:dev
     container_name: task-app-back
     ports:
       - 8000:8000
     depends_on:
-      - db
+      - database
     environment:
       - PGSQL_HOST=task-app-postgres
       - PGSQL_PORT=${PGSQL_PORT}
       - PGSQL_USER=${PGSQL_USER}
       - PGSQL_PASS=${PGSQL_PASS}
       - PGSQL_DB=${PGSQL_DB}
+  
+  database:
+    build: postgresql
+    image: task-app-pgsql:dev
+    container_name: task-app-postgres
+    ports:
+      - ${PGSQL_PORT}:5432
+    volumes:
+      - ./postgresql/db_store:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=${PGSQL_USER}
+      - POSTGRES_PASSWORD=${PGSQL_PASS}
+      - POSTGRES_DB=${PGSQL_DB}
+    # healthcheck:
+    #   test: ["CMD-SHELL", "pg_isready -U ${PGSQL_USER}"]
+    #   interval: 2s
+    #   retries: 5
 
   # flyway-baseline:
   #   <<: *flyway-template
@@ -51,20 +69,3 @@ services:
   # flyway-info:
   #   <<: *flyway-template
   #   command: info
-
-  db:
-    image: postgres:17.2-alpine3.21
-    container_name: task-app-postgres
-    ports:
-      - ${PGSQL_PORT}:5432
-    volumes:
-      - ./postgresql/db_store:/var/lib/postgresql/data
-      - ./postgresql/init:/docker-entrypoint-initdb.d
-    environment:
-      - POSTGRES_USER=${PGSQL_USER}
-      - POSTGRES_PASSWORD=${PGSQL_PASS}
-      - POSTGRES_DB=${PGSQL_DB}
-    # healthcheck:
-    #   test: ["CMD-SHELL", "pg_isready -U ${PGSQL_USER}"]
-    #   interval: 2s
-    #   retries: 5
