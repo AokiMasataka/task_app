@@ -32,17 +32,17 @@ def get_all(project_id: UUID) -> List[dict]:
     return docs
 
 
-def get(project_id: UUID, doc_id: UUID) -> dict:
+def get(doc_id: UUID) -> dict:
     query = """
     SELECT
-        id, title, content, created_at, updated_at
+        id, project_id, title, content, created_at, updated_at
     FROM
         docs
     WHERE
-        project_id = %s AND id = %s
+        id = %s
     """
 
-    values = (project_id, doc_id)
+    values = (doc_id, )
 
     with DatabaseConnector() as cur:
         cur.execute(query=query, vars=values)
@@ -78,36 +78,33 @@ def update(doc: Doc) -> None:
     UPDATE
         docs
     SET
-        id = %s,
-        project_id = %s,
         title = %s,
         content = %s,
-        created_at = %s,
         updated_at = %s
+    WHERE
+        id = %s
     """
 
     values = (
-        doc.id,
-        doc.project_id,
         doc.title,
         doc.content,
-        doc.created_at,
-        doc.updated_at
+        doc.updated_at,
+        doc.id
     )
 
     with DatabaseConnector()  as cur:
         cur.execute(query=query, vars=values)
 
 
-def delete(project_id: UUID, doc_id: UUID) -> None:
+def delete(doc_id: UUID) -> None:
     query = """
     DELETE FROM
-        tasks
+        docs
     WHERE
-        project_id = %s AND id = %s
+        id = %s
     """
 
-    values = (project_id, doc_id)
+    values = (doc_id, )
 
     with DatabaseConnector() as cur:
         cur.execute(query=query, vars=values)

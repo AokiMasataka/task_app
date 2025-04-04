@@ -20,9 +20,9 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import TabSwitch from "../components/TabSwitch";
-import { fetchDocsAPI } from "../scripts/docApi";
-import { Docs } from "../scripts/types";
+import TabSwitch from "../../../components/TabSwitch";
+import { fetchDocsAPI } from "../../../scripts/docApi";
+import { Docs } from "../../../scripts/types";
 
 const router = useRouter();
 const projectId = useRoute().params.projectId as string;

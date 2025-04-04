@@ -42,11 +42,11 @@
 import { computed, ref } from "vue";
 import { Task } from "../../scripts/types";
 import DeleteBtn from "../DeleteBtn";
-import Content from "./parts/Content.vue";
-import Duedate from "./parts/Duedate.vue";
-import Priority from "./parts/Priority.vue";
-import Status from "./parts/Status.vue";
-import Title from "./parts/Title.vue";
+import Content from "../atomic/Content.vue";
+import Duedate from "../atomic/Duedate.vue";
+import Priority from "../atomic/Priority.vue";
+import Status from "../atomic/Status.vue";
+import Title from "../atomic/Title.vue";
 
 const props = defineProps<{ isUpdateForm: boolean; isPreviewMode: boolean }>();
 const model = defineModel<Task>({ required: true });

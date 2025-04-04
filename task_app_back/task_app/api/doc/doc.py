@@ -23,7 +23,7 @@ router = APIRouter()
     response_model=DocGetResponse
 )
 def get_doc(project_id: UUID, doc_id: UUID):
-    doc = domain.doc.get(project_id=project_id, doc_id=doc_id)
+    doc = domain.doc.get(doc_id=doc_id)
     return DocGetResponse(
         id=doc.id,
         project_id=doc.project_id,
@@ -87,4 +87,4 @@ def update_doc(project_id: UUID, doc_id:  UUID, update_request: DocUpdateRequest
 
 @router.delete("/projects/{project_id}/docs/{doc_id}", status_code=204)
 def delete_doc(project_id: UUID, doc_id: UUID):
-    domain.doc.delete(project_id=project_id, dco_id=doc_id)
+    domain.doc.delete(doc_id=doc_id)
