@@ -10,9 +10,9 @@ def get_all(project_id: UUID) -> List[Doc]:
     return docs
 
 
-def get(project_id: UUID, doc_id: UUID) -> Doc:
-    doc = doc_service.get(project_id=project_id, doc_id=doc_id)
-    doc = Doc(**doc, project_id=project_id)
+def get(doc_id: UUID) -> Doc:
+    doc = doc_service.get(doc_id=doc_id)
+    doc = Doc(**doc)
     return doc
 
 
@@ -38,5 +38,5 @@ def update(
     return update_doc
 
 
-def delete(prproject_id: UUID, doc_id: UUID) -> None:
-    doc_service.delete(project_id=prproject_id, doc_id=doc_id)
+def delete(doc_id: UUID) -> None:
+    doc_service.delete(doc_id=doc_id)

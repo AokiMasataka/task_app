@@ -1,6 +1,5 @@
 import { HOST, PORT } from "./const.ts";
-import { Doc, Docs, AllItems } from "./types.ts";
-
+import { AllItems, Doc } from "./types.ts";
 
 export async function fetchDocsAPI(projectId: string): Promise<AllItems<Doc>> {
     const response = await fetch(
@@ -13,7 +12,10 @@ export async function fetchDocsAPI(projectId: string): Promise<AllItems<Doc>> {
     return await response.json();
 }
 
-export async function fetchDocAPI(projectId: string, docId: string): Promise<Doc> {
+export async function fetchDocAPI(
+    projectId: string,
+    docId: string
+): Promise<Doc> {
     const response = await fetch(
         `http://${HOST}:${PORT}/projects/${projectId}/docs/${docId}`,
         {
@@ -24,35 +26,32 @@ export async function fetchDocAPI(projectId: string, docId: string): Promise<Doc
     return await response.json();
 }
 
-async function modifyDoc(
-    doc: Doc,
-    method: string,
-    endpoint: string,
-) {
+async function modifyDoc(doc: Doc, method: string, endpoint: string) {
     const requestUrl = new URL(endpoint, `http://${HOST}:${PORT}`);
-    await fetch(
-        requestUrl, {
-            method: method,
-            headers: { "content-type": "application/json" },
-            body: JSON.stringify({
-                title: doc.title,
-                content: doc.content,
-            })
-        }
-    );
+    const response = await fetch(requestUrl, {
+        method: method,
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+            title: doc.title,
+            content: doc.content,
+        }),
+    });
+    return await response.json();
 }
 
-
-export async function postDocAPI(projectId: string, doc: Doc) {
+export async function postDocAPI(
+    projectId: string,
+    doc: Doc
+): Promise<{ id: string }> {
     const endpoint = `/projects/${projectId}/docs`;
-    await modifyDoc(doc, "POST", endpoint);
+    const response = await modifyDoc(doc, "POST", endpoint);
+    return response;
 }
 
 export async function updateDocAPI(projectId: string, doc: Doc) {
     const endpoint = `/projects/${projectId}/docs/${doc.id}`;
     await modifyDoc(doc, "PUT", endpoint);
 }
-
 
 export async function deleteDocAPI(projectId: string, id: string) {
     await fetch(`http://${HOST}:${PORT}/projects/${projectId}/docs/${id}`, {

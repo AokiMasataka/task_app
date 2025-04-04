@@ -31,9 +31,9 @@ def get_tasks_with_status(project_id: UUID, status: int) -> List[Task]:
     return tasks
 
 
-def get(project_id: UUID, task_id: UUID) -> Task:
-    task = task_service.get(project_id=project_id, task_id=task_id)
-    task = Task(**task, project_id=project_id)
+def get(task_id: UUID) -> Task:
+    task = task_service.get(task_id=task_id)
+    task = Task(**task)
     return task
 
 
@@ -59,5 +59,5 @@ def update(
     return updated_task
 
 
-def delete(project_id: UUID, task_id: UUID) -> None:
-    task_service.delete(project_id=project_id, task_id=task_id)
+def delete(task_id: UUID) -> None:
+    task_service.delete(task_id=task_id)
