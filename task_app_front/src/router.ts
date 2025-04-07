@@ -3,13 +3,13 @@ import Doc from "./views/Doc.vue";
 import Docs from "./views/Docs.vue";
 import NewDoc from "./views/NewDoc.vue";
 import ProjectView from "./views/Project.vue";
-import ProjectsView from "./views/Projects.vue";
+import Projects from "./views/Projects";
 import Tasks from "./views/Tasks.vue";
 import UpdateDoc from "./views/UpdateDoc.vue";
 
 const routes = [
     { path: "/", redirect: "/projects" },
-    { path: "/projects", name: "projects", component: ProjectsView },
+    { path: "/projects", name: "projects", component: Projects },
     { path: "/projects/:projectId", name: "project", component: ProjectView },
     { path: "/projects/:projectId/tasks", name: "tasks", component: Tasks },
     { path: "/projects/:projectId/docs/", name: "docs", component: Docs },
