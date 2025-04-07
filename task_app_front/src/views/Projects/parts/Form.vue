@@ -1,13 +1,8 @@
 <template>
     <v-card :title="props.title">
         <v-card-text>
-            <v-text-field
-                v-model="project.title"
-                label="Project title"
-                variant="solo-filled"
-                placeholder="input title"
-                required
-                :rules="[rules.required]"
+            <Title
+                v-model:title="project.title"
             />
             <v-text-field
                 v-model="project.description"
@@ -30,7 +25,8 @@
 </template>
 
 <script setup lang="ts">
-import { Project } from "../../scripts/types";
+import { Project } from "@/scripts/types";
+import Title from "@/components/atomic/Title.vue";
 
 const props = defineProps<{ title: string }>();
 const project = defineModel<Project>({ required: true });
@@ -39,5 +35,4 @@ defineEmits<{
     (e: "onSave"): void;
 }>();
 
-const rules = { required: (value) => !!value || "Field is required" };
 </script>

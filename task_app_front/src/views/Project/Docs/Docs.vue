@@ -1,17 +1,13 @@
 <template>
-    <div class="mx-8 my-4">
-        <h1 class="text-3xl my-4">{{ ProjectName }}</h1>
-        <div class="flex justify-between">
-            <TabSwitch />
-            <v-btn class="" @click="onCreateDoc">Create New Doc</v-btn>
-        </div>
-
+    <div>
         <div v-for="doc in docs">
-            <v-card
-                class="mt-4"
+            <ItemCard
+                :id="doc.id"
                 :title="doc.title"
                 :subtitle="doc.content"
-                @click="viewDoc(doc.id)"
+                @fetch-item="viewDoc(doc.id)"
+                @update-item="updateDoc(doc.id)"
+                @delete-item="deleteDoc(doc.id)"
             />
         </div>
     </div>
@@ -20,13 +16,12 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import TabSwitch from "../../../components/TabSwitch";
-import { fetchDocsAPI } from "../../../scripts/docApi";
-import { Docs } from "../../../scripts/types";
+import ItemCard from "@/components/ItemCard";
+import { fetchDocsAPI, deleteDocAPI } from "@/scripts/docApi";
+import { Docs } from "@/scripts/types";
 
 const router = useRouter();
 const projectId = useRoute().params.projectId as string;
-const ProjectName = "Sample Project";
 
 const docs = ref<Docs>([]);
 
@@ -39,8 +34,13 @@ function viewDoc(docId: string) {
     router.push({ path: `/projects/${projectId}/docs/${docId}` });
 }
 
-function onCreateDoc() {
-    router.push({ path: `/projects/${projectId}/docs/new` });
+function updateDoc(docId: string) {
+    router.push({ path: `/projects/${projectId}/docs/${docId}/edit` });
+}
+
+async function deleteDoc(docId: string) {
+    await deleteDocAPI(projectId, docId);
+    await fetchDocs();
 }
 
 onMounted(fetchDocs);

@@ -28,10 +28,10 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import Content from "../components/atomic/Content.vue";
-import Title from "../components/atomic/Title.vue";
-import { fetchDocAPI, updateDocAPI } from "../scripts/docApi";
-import { Doc } from "../scripts/types";
+import Content from "@/components/atomic/Content.vue";
+import Title from "@/components/atomic/Title.vue";
+import { fetchDocAPI, updateDocAPI } from "@/scripts/docApi";
+import { Doc } from "@/scripts/types";
 
 const router = useRouter();
 const projectId = useRoute().params.projectId as string;

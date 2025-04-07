@@ -1,70 +1,64 @@
 <template>
-    <div class="mx-8 my-4">
-        <h1 class="text-3xl my-4">{{ ProjectName }}</h1>
-        <TabSwitch class="" />
-        <div class="flex justify-between h-lvh gap-3 mt-4">
-            <TaskList
-                v-model:draggingTask="draggingTask"
-                display-status="Todo"
-                :value-status="state.Todo"
-                :tasks="fetchedTasks.todo"
-                :emphasislStatus="isEmphasislStatus(state.Todo)"
-                :loading="loading"
-                @create-task="createTask"
-                @update-task="updateTask"
-                @delete-task="deleteTask"
-                @on-drag-over="() => (emphasislStatus = state.Todo)"
-                @on-drop-task="updateTask"
-                @on-drag-end="emphasislStatus = null"
-            ></TaskList>
-            <TaskList
-                v-model:draggingTask="draggingTask"
-                display-status="Doing"
-                :value-status="state.Doing"
-                :tasks="fetchedTasks.doing"
-                :emphasislStatus="isEmphasislStatus(state.Doing)"
-                :loading="loading"
-                @create-task="createTask"
-                @update-task="updateTask"
-                @delete-task="deleteTask"
-                @on-drag-over="() => (emphasislStatus = state.Doing)"
-                @on-drop-task="updateTask"
-                @on-drag-end="emphasislStatus = null"
-            ></TaskList>
-            <TaskList
-                v-model:draggingTask="draggingTask"
-                display-status="Done"
-                :value-status="state.Done"
-                :tasks="fetchedTasks.done"
-                :emphasislStatus="isEmphasislStatus(state.Done)"
-                :loading="loading"
-                @create-task="createTask"
-                @update-task="updateTask"
-                @delete-task="deleteTask"
-                @on-drag-over="() => (emphasislStatus = state.Done)"
-                @on-drop-task="updateTask"
-                @on-drag-end="emphasislStatus = null"
-            ></TaskList>
-        </div>
+    <div class="flex justify-between h-lvh gap-3">
+        <TaskList
+            v-model:draggingTask="draggingTask"
+            display-status="Todo"
+            :value-status="state.Todo"
+            :tasks="fetchedTasks.todo"
+            :emphasislStatus="isEmphasislStatus(state.Todo)"
+            :loading="loading"
+            @create-task="createTask"
+            @update-task="updateTask"
+            @delete-task="deleteTask"
+            @on-drag-over="() => (emphasislStatus = state.Todo)"
+            @on-drop-task="updateTask"
+            @on-drag-end="emphasislStatus = null"
+        ></TaskList>
+        <TaskList
+            v-model:draggingTask="draggingTask"
+            display-status="Doing"
+            :value-status="state.Doing"
+            :tasks="fetchedTasks.doing"
+            :emphasislStatus="isEmphasislStatus(state.Doing)"
+            :loading="loading"
+            @create-task="createTask"
+            @update-task="updateTask"
+            @delete-task="deleteTask"
+            @on-drag-over="() => (emphasislStatus = state.Doing)"
+            @on-drop-task="updateTask"
+            @on-drag-end="emphasislStatus = null"
+        ></TaskList>
+        <TaskList
+            v-model:draggingTask="draggingTask"
+            display-status="Done"
+            :value-status="state.Done"
+            :tasks="fetchedTasks.done"
+            :emphasislStatus="isEmphasislStatus(state.Done)"
+            :loading="loading"
+            @create-task="createTask"
+            @update-task="updateTask"
+            @delete-task="deleteTask"
+            @on-drag-over="() => (emphasislStatus = state.Done)"
+            @on-drop-task="updateTask"
+            @on-drag-end="emphasislStatus = null"
+        ></TaskList>
     </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
-import TabSwitch from "../components/TabSwitch";
-import TaskList from "../components/TaskList";
-import { state } from "../scripts/const";
+import TaskList from "@/components/TaskList";
+import { state } from "@/scripts/const";
 import {
     deleteTaskAPI,
     fetchTasksAPI,
     postTaskAPI,
     updateTaskAPI,
-} from "../scripts/taskApi";
-import { Task, Tasks } from "../scripts/types";
+} from "@/scripts/taskApi";
+import { Task, Tasks } from "@/scripts/types";
 
 const projectId = useRoute().params.projectId as string;
-const ProjectName = "Sample Project";
 
 const fetchedTasks = ref<{
     todo: Tasks;
