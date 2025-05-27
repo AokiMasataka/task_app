@@ -13,12 +13,12 @@
 #     - FLYWAY_CLEAN_DISABLED=false
 
 services:
-  # frnotend:
-  #   build: task_app_front
-  #   container_name: task-app-front
-  #   ports:
-  #     - 80:80
-  #     - 443:443
+  frnotend:
+    build: task_app_front
+    container_name: task-app-front
+    ports:
+      - 80:80
+      - 443:443
 
   backend:
     build: task_app_back
