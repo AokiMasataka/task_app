@@ -1,42 +1,60 @@
 <template>
-    <div class="mx-8 my-4">
-        <h1 class="text-3xl my-4">{{ ProjectName }}</h1>
-        <div class="flex justify-between">
-            <TabSwitch />
-            <v-btn class="" @click="onCreateDoc">Create New Doc</v-btn>
+    <div class="flex flex-col">
+        <div class="flex justify-end">
+            <v-btn @click="onCreateDoc">Create New Doc</v-btn>
         </div>
-
-        <div v-for="doc in docs">
-            <v-card
-                class="mt-4"
+        <div v-for="doc in docs" v-if="!isLoading" class="mt-2">
+            <ItemCard
+                :id="doc.id"
                 :title="doc.title"
                 :subtitle="doc.content"
-                @click="viewDoc(doc.id)"
+                :draggable="false"
+                @fetch-item="viewDoc(doc.id)"
+                @update-item="updateDoc(doc.id)"
+                @delete-item="deleteDoc(doc.id)"
             />
+        </div>
+
+        <div v-else class="flex justify-center items-center">
+            <v-progress-circular indeterminate />
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
+import ItemCard from "@/components/ItemCard";
+import { deleteDocAPI, fetchDocsAPI } from "@/scripts/docApi";
+import { Docs } from "@/scripts/types";
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import TabSwitch from "../../../components/TabSwitch";
-import { fetchDocsAPI } from "../../../scripts/docApi";
-import { Docs } from "../../../scripts/types";
 
 const router = useRouter();
 const projectId = useRoute().params.projectId as string;
-const ProjectName = "Sample Project";
 
 const docs = ref<Docs>([]);
+const isLoading = ref<boolean>(false);
 
 async function fetchDocs() {
-    const results = await fetchDocsAPI(projectId);
-    docs.value = results.results;
+    isLoading.value = true;
+    try {
+        const results = await fetchDocsAPI(projectId);
+        docs.value = results.results;
+    } finally {
+        isLoading.value = false;
+    }
 }
 
 function viewDoc(docId: string) {
     router.push({ path: `/projects/${projectId}/docs/${docId}` });
+}
+
+function updateDoc(docId: string) {
+    router.push({ path: `/projects/${projectId}/docs/${docId}/edit` });
+}
+
+async function deleteDoc(docId: string) {
+    await deleteDocAPI(projectId, docId);
+    await fetchDocs();
 }
 
 function onCreateDoc() {

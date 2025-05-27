@@ -58,7 +58,7 @@ def get_tasks(project_id: UUID, status: int = 0):
 
 @router.get("/projects/{project_id}/tasks/{task_id}", status_code=200)
 def get_task(project_id: UUID, task_id:  UUID):
-    task = domain.task.get(project_id=project_id, task_id=task_id)
+    task = domain.task.get(task_id=task_id)
     return TaskGetResponse(
         id=task.id,
         project_id=task.project_id,
@@ -99,4 +99,4 @@ def update_task(project_id: UUID, task_id:  UUID, update_request: TaskUpdateRequ
 
 @router.delete("/projects/{project_id}/tasks/{task_id}", status_code=204)
 def delete_task(project_id: UUID, task_id:  UUID):
-    domain.task.delete(project_id=project_id, task_id=task_id)
+    domain.task.delete(task_id=task_id)
