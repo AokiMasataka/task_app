@@ -6,12 +6,7 @@
             :ripple="false"
             @click="$emit('fetchItem')"
         >
-            <v-card-item>
-                <v-card-title>{{ props.title }}</v-card-title>
-                <v-card-subtitle>
-                    {{ isEmptyContent(props.subtitle) }}
-                </v-card-subtitle>
-            </v-card-item>
+            <slot></slot>
         </v-card>
 
         <v-card

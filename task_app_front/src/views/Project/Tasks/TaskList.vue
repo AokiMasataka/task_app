@@ -8,7 +8,7 @@
         @drop="handleTaskDrop"
         @dragover="dragOver"
     >
-        <div class="flex justify-between">
+        <div class="flex justify-between items-center">
             <h1 class="m-6 text-2xl">{{ props.displayStatus }}</h1>
             <v-btn class="m-4" @click="onCreateTaskBtn">+</v-btn>
         </div>

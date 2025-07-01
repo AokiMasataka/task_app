@@ -4,14 +4,14 @@ from ..schemas import Project
 from ..service import project
 
 
-def create(title: str, description: str) -> UUID:
+async def create(title: str, description: str) -> UUID:
     new_project = Project.new(title=title, description=description)
-    project.create(new_project)
-    return new_project.id
+    
+    return (await project.create(new_project)).id
 
 
-def get_all() -> List[Project]:
-    dict_projects = project.get_all()
+async def get_all() -> List[Project]:
+    dict_projects = await project.get_all()
     projects = [
         Project(
             id=dict_project["id"],
@@ -23,8 +23,8 @@ def get_all() -> List[Project]:
     return projects
 
 
-def get(project_id: UUID) -> Project:
-    dict_project = project.get(project_id=project_id)
+async def get(project_id: UUID) -> Project:
+    dict_project = await project.get(project_id=project_id)
     return Project(
         id=dict_project["id"],
         title=dict_project["title"],
@@ -34,15 +34,15 @@ def get(project_id: UUID) -> Project:
     )
 
 
-def update(project_id: UUID, title: str, description: str) -> Project:
+async def update(project_id: UUID, title: str, description: str) -> Project:
     updated_project = Project.new_update(
         id=project_id,
         title=title,
         description=description
     )
-    project.update(project=updated_project)
+    await project.update(project=updated_project)
     return updated_project
 
 
-def delete(project_id: UUID) -> None:
-    project.delete(project_id=project_id)
+async def delete(project_id: UUID) -> None:
+    await project.delete(project_id=project_id)

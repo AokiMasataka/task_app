@@ -1,64 +1,52 @@
 from typing import List
 from uuid import UUID
-from .utils import DatabaseConnector
+from .utils import AsyncDatabaseConnector
 from ..schemas import Task
 
 
-__all__ = [
-    "get",
-    "get_tasks_with_status",
-    "create",
-    "update",
-    "delete"
-]
-
-
-def get_tasks_with_status(project_id: UUID, status: int = None) -> List[dict]:
-    query = """
+async def get_tasks_with_status(project_id: UUID, status: int, sort_key: str) -> List[dict]:
+    if "priority" not in ["priority", "duedate"]:
+        return []
+    
+    query = f"""
     SELECT
         id, title, content, status, priority, duedate, created_at, updated_at
     FROM
         tasks
     WHERE
-        project_id = %s AND status = %s
+        project_id = $1 AND status = $2
+    ORDER BY {sort_key} DESC
     """
     values = (project_id, status)
 
-    with DatabaseConnector() as cur:
-        cur.execute(query=query, vars=values)
-        rows = cur.fetchall()
-
-    tasks = [dict(row) for row in rows]
-
-    return tasks
+    async with AsyncDatabaseConnector() as conn:
+        results = await conn.fetch(query, *values)
+    
+    return [dict(result) for result in results]
 
 
-def get(task_id: UUID) -> dict:
+async def get(task_id: UUID) -> dict:
     query = """
     SELECT
         id, project_id, title, content, status, priority, duedate, created_at, updated_at
     FROM
         tasks
     WHERE
-        id = %s
+        id = $1
     """
     values = (task_id, )
 
-    with DatabaseConnector() as cur:
-        cur.execute(query=query, vars=values)
-        row = cur.fetchone()
-
-    task = dict(row)
-    return task
+    async with AsyncDatabaseConnector() as conn:
+        result = await conn.fetchrow(query, *values)
+    return dict(result)
 
 
-def create(task: Task):
-    
+async def create(task: Task) -> None:
     query = """
     INSERT INTO tasks
         (id, project_id, title, content, status, priority, duedate, created_at, updated_at)
     VALUES
-        (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+        ($1, $2, $3, $4, $5, $6, $7, $8, $9)
     """
     values = (
         task.id,
@@ -72,23 +60,22 @@ def create(task: Task):
         task.updated_at
     )
 
-    with DatabaseConnector() as cur:
-        cur.execute(query=query, vars=values)
+    async with AsyncDatabaseConnector() as conn:
+        await conn.execute(query, *values)
 
-
-def update(task: Task):
+async def update(task: Task) -> None:
     query = """
     UPDATE
         tasks
     SET
-        title = %s,
-        content = %s,
-        status = %s,
-        priority = %s,
-        duedate = %s,
-        updated_at = %s
+        title = $1,
+        content = $2,
+        status = $3,
+        priority = $4,
+        duedate = $5,
+        updated_at = $6
     WHERE
-        id = %s
+        id = $7
     """
     values = (
         task.title,
@@ -100,18 +87,18 @@ def update(task: Task):
         task.id
     )
 
-    with DatabaseConnector() as cur:
-        cur.execute(query=query, vars=values)
+    async with AsyncDatabaseConnector() as conn:
+        await conn.execute(query, *values)
 
 
-def delete(task_id: UUID):
+async def delete(task_id: UUID) -> None:
     query = """
     DELETE FROM
         tasks
     WHERE
-        id = %s
+        id = $1
     """
     values = (task_id, )
-    
-    with DatabaseConnector() as cur:
-        cur.execute(query=query, vars=values)
+
+    async with AsyncDatabaseConnector() as conn:
+        await conn.execute(query, *values)

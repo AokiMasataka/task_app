@@ -1,14 +1,14 @@
 from uuid import UUID
-from .utils import DatabaseConnector
+from .utils import AsyncDatabaseConnector
 from ..schemas import Project
 
 
-def create(project: Project) -> None:
+async def create(project: Project) -> None:
     query = """
     INSERT INTO projects
         (id, title, description, created_at, updated_at)
     VALUES
-        (%s, %s, %s, %s, %s)
+        ($1, $2, $3, $4, $5)
     """
     values = (
         project.id,
@@ -18,11 +18,11 @@ def create(project: Project) -> None:
         project.updated_at
     )
 
-    with DatabaseConnector() as cur:
-        cur.execute(query=query, vars=values)
+    async with AsyncDatabaseConnector() as conn:
+        await conn.execute(query, *values)
 
 
-def get_all() -> list[dict]:
+async def get_all() -> list[dict]:
     query = """
     SELECT
         id, title, description, created_at, updated_at
@@ -30,42 +30,39 @@ def get_all() -> list[dict]:
         projects
     """
 
-    with DatabaseConnector() as cur:
-        cur.execute(query=query)
-        rows = cur.fetchall()
+    async with AsyncDatabaseConnector() as conn:
+        results = await conn.fetch(query)
 
-    projects = [dict(row) for row in rows]
+    return [dict(result) for result in results]
 
-    return projects
 
-def get(project_id: UUID) -> dict:
+async def get(project_id: UUID) -> dict:
     query = """
     SELECT
         id, title, description, created_at, updated_at
     FROM
         projects
     WHERE
-        id = %s
+        id = $1
     """
     values = (project_id,)
 
-    with DatabaseConnector() as cur:
-        cur.execute(query=query, vars=values)
-        row = cur.fetchone()
+    async with AsyncDatabaseConnector() as cur:
+        result = await cur.fetchrow(query, *values)
 
-    project = dict(row)
-    return project
+    return dict(result)
 
-def update(project: Project) -> None:
+
+async def update(project: Project) -> None:
     query = """
     UPDATE
         projects
     SET
-        title = %s,
-        description = %s,
-        updated_at = %s
+        title = $1,
+        description = $2,
+        updated_at = $3
     WHERE
-        id = %s
+        id = $4
     """
     values = (
         project.title,
@@ -74,17 +71,18 @@ def update(project: Project) -> None:
         project.id
     )
 
-    with DatabaseConnector() as cur:
-        cur.execute(query=query, vars=values)
+    async with AsyncDatabaseConnector() as conn:
+        await conn.execute(query, *values)
 
-def delete(project_id: UUID) -> None:
+
+async def delete(project_id: UUID) -> None:
     query = """
     DELETE FROM
         projects
     WHERE
-        id = %s
+        id = $1
     """
     values = (project_id, )
 
-    with DatabaseConnector() as cur:
-        cur.execute(query=query, vars=values)
+    async with AsyncDatabaseConnector() as conn:
+        await conn.execute(query, *values)

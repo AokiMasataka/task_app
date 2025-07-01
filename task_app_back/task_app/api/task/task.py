@@ -1,7 +1,7 @@
 
 from logging import getLogger
 from uuid import UUID
-from fastapi import APIRouter
+from fastapi import APIRouter, Response
 from .task_schema import (
     TaskCreateRequest,
     TaskCreateResponse,
@@ -21,8 +21,8 @@ router = APIRouter()
     status_code=201,
     response_model=TaskCreateResponse,
 )
-def create_task(project_id: UUID, create_request: TaskCreateRequest):
-    task_id = domain.task.create(
+async def create_task(project_id: UUID, create_request: TaskCreateRequest):
+    task_id = await domain.task.create(
         project_id=project_id,
         title=create_request.title,
         content=create_request.content,
@@ -38,8 +38,15 @@ def create_task(project_id: UUID, create_request: TaskCreateRequest):
     status_code=200,
     response_model=TaskGetAllResponse
 )
-def get_tasks(project_id: UUID, status: int = 0):
-    tasks = domain.task.get_tasks_with_status(project_id=project_id, status=status)
+async def get_tasks(project_id: UUID, status: int = 0, sort_key: str = "duedate"):
+    if sort_key not in ["duedate", "priority"]:
+        return Response(status_code=400, content="priority | duedate")
+
+    tasks = await domain.task.get_tasks_with_status(
+        project_id=project_id,
+        status=status,
+        sort_key=sort_key
+    )
 
     tasks = [
         TaskGetResponse(
@@ -57,8 +64,8 @@ def get_tasks(project_id: UUID, status: int = 0):
 
 
 @router.get("/projects/{project_id}/tasks/{task_id}", status_code=200)
-def get_task(project_id: UUID, task_id:  UUID):
-    task = domain.task.get(task_id=task_id)
+async def get_task(project_id: UUID, task_id:  UUID):
+    task = await domain.task.get(task_id=task_id)
     return TaskGetResponse(
         id=task.id,
         project_id=task.project_id,
@@ -75,8 +82,8 @@ def get_task(project_id: UUID, task_id:  UUID):
     status_code=200,
     response_model=TaskUpdateResponse
 )
-def update_task(project_id: UUID, task_id:  UUID, update_request: TaskUpdateRequest):
-    updated_task = domain.task.update(
+async def update_task(project_id: UUID, task_id:  UUID, update_request: TaskUpdateRequest):
+    updated_task = await domain.task.update(
         task_id=task_id,
         project_id=project_id,
         title=update_request.title,
@@ -98,5 +105,5 @@ def update_task(project_id: UUID, task_id:  UUID, update_request: TaskUpdateRequ
 
 
 @router.delete("/projects/{project_id}/tasks/{task_id}", status_code=204)
-def delete_task(project_id: UUID, task_id:  UUID):
-    domain.task.delete(task_id=task_id)
+async def delete_task(project_id: UUID, task_id: UUID):
+    await domain.task.delete(task_id=task_id)

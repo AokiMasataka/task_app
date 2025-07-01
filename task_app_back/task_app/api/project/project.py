@@ -20,26 +20,26 @@ router = APIRouter()
 # TODO: Errorハンドリング
 
 @router.post("/projects", status_code=201, response_model=ProjectCreateResponse)
-def create_project(create_request: ProjectCreateRequest):
-    project_id = domain.project.create(create_request.title, create_request.description)
+async def create_project(create_request: ProjectCreateRequest):
+    project_id = await domain.project.create(create_request.title, create_request.description)
     return ProjectCreateResponse(id=project_id)
 
 
 @router.get("/projects", status_code=200, response_model=ProjestGetAllResponse)
-def get_projects():
+async def get_projects():
     results = [
         ProjectGetResopnse(
             id=dict_project.id,
             title=dict_project.title,
             description=dict_project.description
-        ) for dict_project in domain.project.get_all()
+        ) for dict_project in await domain.project.get_all()
     ]
     return ProjestGetAllResponse(results=results, count=len(results), next=None, prev=None)
 
 
 @router.get("/projects/{project_id}", status_code=200, response_model=ProjectGetResopnse)
-def get_project(project_id: UUID):
-    project = domain.project.get(project_id=project_id)
+async def get_project(project_id: UUID):
+    project = await domain.project.get(project_id=project_id)
     return ProjectGetResopnse(
         id=project.id,
         title=project.title,
@@ -48,8 +48,8 @@ def get_project(project_id: UUID):
 
 
 @router.put("/projects/{project_id}", status_code=200, response_model=ProjectUpdateResponse)
-def update_project(project_id: UUID, update_request: ProjectUpdateRequest):
-    updateed_project = domain.project.update(
+async def update_project(project_id: UUID, update_request: ProjectUpdateRequest):
+    updateed_project = await domain.project.update(
         project_id=project_id,
         title=update_request.title,
         description=update_request.description
@@ -62,7 +62,7 @@ def update_project(project_id: UUID, update_request: ProjectUpdateRequest):
 
 
 @router.delete("/projects/{project_id}", status_code=204)
-def delete_project(project_id: UUID):
-    domain.project.delete(
+async def delete_project(project_id: UUID):
+    await domain.project.delete(
         project_id=project_id
     )

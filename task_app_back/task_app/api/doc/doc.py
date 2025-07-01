@@ -22,8 +22,8 @@ router = APIRouter()
     status_code=200,
     response_model=DocGetResponse
 )
-def get_doc(project_id: UUID, doc_id: UUID):
-    doc = domain.doc.get(doc_id=doc_id)
+async def get_doc(project_id: UUID, doc_id: UUID):
+    doc = await domain.doc.get(doc_id=doc_id)
     return DocGetResponse(
         id=doc.id,
         project_id=doc.project_id,
@@ -37,8 +37,8 @@ def get_doc(project_id: UUID, doc_id: UUID):
     status_code=200,
     response_model=DocGetAllResponse
 )
-def get_docs(project_id: UUID):
-    docs = domain.doc.get_all(project_id=project_id)
+async def get_docs(project_id: UUID):
+    docs = await domain.doc.get_all(project_id=project_id)
     docs = [
         DocGetResponse(
             id=doc.id,
@@ -55,8 +55,8 @@ def get_docs(project_id: UUID):
     status_code=201,
     response_model=DocCreateResponse
 )
-def cretae_doc(project_id: UUID, create_request: DocCreateRequest):
-    doc_id = domain.doc.create(
+async def cretae_doc(project_id: UUID, create_request: DocCreateRequest):
+    doc_id = await domain.doc.create(
         project_id=project_id,
         title=create_request.title,
         content=create_request.content
@@ -69,8 +69,8 @@ def cretae_doc(project_id: UUID, create_request: DocCreateRequest):
     status_code=200,
     response_model=DocUpdateResponse
 )
-def update_doc(project_id: UUID, doc_id:  UUID, update_request: DocUpdateRequest):
-    updated_doc = domain.doc.update(
+async def update_doc(project_id: UUID, doc_id:  UUID, update_request: DocUpdateRequest):
+    updated_doc = await domain.doc.update(
         doc_id=doc_id,
         project_id=project_id,
         title=update_request.title,
@@ -86,5 +86,5 @@ def update_doc(project_id: UUID, doc_id:  UUID, update_request: DocUpdateRequest
 
 
 @router.delete("/projects/{project_id}/docs/{doc_id}", status_code=204)
-def delete_doc(project_id: UUID, doc_id: UUID):
-    domain.doc.delete(doc_id=doc_id)
+async def delete_doc(project_id: UUID, doc_id: UUID):
+    await domain.doc.delete(doc_id=doc_id)

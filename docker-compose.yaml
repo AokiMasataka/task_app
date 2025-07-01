@@ -20,19 +20,19 @@ services:
       - 80:80
       - 443:443
 
-  backend:
-    build: task_app_back
-    container_name: task-app-back
-    ports:
-      - 8000:8000
-    depends_on:
-      - db
-    environment:
-      - PGSQL_HOST=task-app-postgres
-      - PGSQL_PORT=${PGSQL_PORT}
-      - PGSQL_USER=${PGSQL_USER}
-      - PGSQL_PASS=${PGSQL_PASS}
-      - PGSQL_DB=${PGSQL_DB}
+  # backend:
+  #   build: task_app_back
+  #   container_name: task-app-back
+  #   ports:
+  #     - 8000:8000
+  #   depends_on:
+  #     - db
+  #   environment:
+  #     - PGSQL_HOST=task-app-postgres
+  #     - PGSQL_PORT=${PGSQL_PORT}
+  #     - PGSQL_USER=${PGSQL_USER}
+  #     - PGSQL_PASS=${PGSQL_PASS}
+  #     - PGSQL_DB=${PGSQL_DB}
 
   # flyway-baseline:
   #   <<: *flyway-template
