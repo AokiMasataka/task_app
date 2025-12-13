@@ -5,14 +5,20 @@
         </div>
         <div v-for="doc in docs" v-if="!isLoading" class="mt-2">
             <ItemCard
-                :id="doc.id"
-                :title="doc.title"
-                :subtitle="doc.content"
                 :draggable="false"
                 @fetch-item="viewDoc(doc.id)"
                 @update-item="updateDoc(doc.id)"
                 @delete-item="deleteDoc(doc.id)"
-            />
+            >
+                <v-card-item>
+                    <v-card-title>{{ doc.title }}</v-card-title>
+                    <v-card-subtitle>
+                        <div class="flex h-4 items-center">
+                            {{ doc.content }}
+                        </div>
+                    </v-card-subtitle>
+                </v-card-item>
+            </ItemCard>
         </div>
 
         <div v-else class="flex justify-center items-center">

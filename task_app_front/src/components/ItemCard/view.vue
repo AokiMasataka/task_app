@@ -30,9 +30,6 @@ import DeleteBtn from "@/components/buttons/Delete.vue";
 import UpdateBtn from "@/components/buttons/Update.vue";
 
 const props = defineProps<{
-    id: string;
-    title: string;
-    subtitle: string;
     draggable: boolean;
 }>();
 defineEmits<{

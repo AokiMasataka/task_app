@@ -1,8 +1,5 @@
 <template>
     <ItemCard
-        :id="props.task.id"
-        :title="props.task.title"
-        :subtitle="props.task.content"
         :draggable="true"
         @fetch-item="$emit('onFecthTask')"
         @update-item="$emit('onUpdateTask')"

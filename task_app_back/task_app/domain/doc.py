@@ -18,8 +18,8 @@ async def get(doc_id: UUID) -> Doc:
 
 
 async def create(project_id: UUID, title: str, content: str) -> UUID:
-    new_doc = await Doc.new(project_id=project_id, title=title, content=content)
-    doc_service.create(doc=new_doc)
+    new_doc = Doc.new(project_id=project_id, title=title, content=content)
+    await doc_service.create(doc=new_doc)
     return new_doc.id
 
 

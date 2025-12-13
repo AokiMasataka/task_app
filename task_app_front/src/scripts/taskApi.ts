@@ -1,4 +1,4 @@
-import { HOST, PORT } from "./const.ts";
+import { HOST, PORT, BACKEND_BASE_URL } from "./const.ts";
 import { dateToString, stringToDate } from "./date.ts";
 import { Task, Tasks } from "./types.ts";
 
@@ -7,7 +7,7 @@ export async function fetchTasksAPI(
     status: number
 ): Promise<Tasks> {
     const response = await fetch(
-        `http://${HOST}:${PORT}/projects/${projectId}/tasks?status=${status}`,
+        `${BACKEND_BASE_URL}projects/${projectId}/tasks?status=${status}`,
         {
             method: "GET",
             headers: { "content-type": "application/json" },
@@ -31,7 +31,7 @@ export async function fetchTaskAPI(
     id: string
 ): Promise<Task> {
     const response = await fetch(
-        `http://${HOST}:${PORT}/projects/${projectId}/tasks/${id}`,
+        `${BACKEND_BASE_URL}projects/${projectId}/tasks/${id}`,
         {
             method: "GET",
             headers: { "content-type": "application/json" },
@@ -49,8 +49,11 @@ async function modifyTask(
     task: Task,
     method: "POST" | "PUT"
 ) {
-    const path = method === "POST" ? `/projects/${projectId}/tasks` : `/projects/${projectId}/tasks/${task.id}`;
-    const requestUrl = new URL(path, `http://${HOST}:${PORT}`);
+    const path =
+        method === "POST"
+            ? `projects/${projectId}/tasks`
+            : `projects/${projectId}/tasks/${task.id}`;
+    const requestUrl = new URL(path, `${BACKEND_BASE_URL}`);
     await fetch(requestUrl, {
         method: method,
         headers: { "content-type": "application/json" },
@@ -73,7 +76,7 @@ export async function updateTaskAPI(projectId: string, task: Task) {
 }
 
 export async function deleteTaskAPI(projectId: string, id: string) {
-    await fetch(`http://${HOST}:${PORT}/projects/${projectId}/tasks/${id}`, {
+    await fetch(`${BACKEND_BASE_URL}projects/${projectId}/tasks/${id}`, {
         method: "DELETE",
         headers: { "content-type": "application/json" },
     });
