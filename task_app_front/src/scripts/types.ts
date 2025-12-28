@@ -10,7 +10,7 @@ export type DocID = string;
 // Project types
 export type Project = {
     id: string;
-    title: string;
+    name: string;
     description: string;
 };
 

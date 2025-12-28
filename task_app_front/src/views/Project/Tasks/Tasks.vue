@@ -1,5 +1,5 @@
 <template>
-    <div class="flex justify-between h-lvh gap-3">
+    <div class="flex justify-between gap-3">
         <TaskList
             v-model:draggingTask="draggingTask"
             display-status="Todo"

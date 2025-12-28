@@ -1,8 +1,8 @@
-import { HOST, PORT, BACKEND_BASE_URL } from "./const.ts";
+import { BACKEND_BASE_URL } from "./const.ts";
 import { Project, Projects } from "./types.ts";
 
 export async function fetchProjectsAPI(): Promise<Projects> {
-    const response = await fetch(`${BACKEND_BASE_URL}projects`, {
+    const response = await fetch(`${BACKEND_BASE_URL}/projects`, {
         method: "GET",
         headers: { "content-type": "application/json" },
     });
@@ -11,7 +11,7 @@ export async function fetchProjectsAPI(): Promise<Projects> {
 }
 
 export async function fetchProjectAPI(id: string): Promise<Project> {
-    const response = await fetch(`${BACKEND_BASE_URL}projects/${id}`, {
+    const response = await fetch(`${BACKEND_BASE_URL}/projects/${id}`, {
         method: "GET",
         headers: { "content-type": "application/json" },
     });
@@ -20,13 +20,18 @@ export async function fetchProjectAPI(id: string): Promise<Project> {
 }
 
 async function modifyProject(project: Project, method: "POST" | "PUT") {
-    const path = method === "POST" ? "projects" : `projects/${project.id}`;
-    const requestUrl = new URL(path, `${BACKEND_BASE_URL}`);
-    await fetch(requestUrl, {
+    let url = "";
+    if (method === "PUT") {
+        url = `${BACKEND_BASE_URL}/projects/${project.id}`;
+    } else {
+        url = `${BACKEND_BASE_URL}/projects`;
+    };
+    
+    await fetch(url, {
         method: method,
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
-            title: project.title,
+            name: project.name,
             description: project.description,
         }),
     });
@@ -41,7 +46,7 @@ export async function updateProjectAPI(project: Project) {
 }
 
 export async function deleteProjectAPI(id: string) {
-    await fetch(`${BACKEND_BASE_URL}projects/${id}`, {
+    await fetch(`${BACKEND_BASE_URL}/projects/${id}`, {
         method: "DELETE",
         headers: { "content-type": "application/json" },
     });

@@ -67,12 +67,12 @@ const formProps = ref<{
     onSave: () => {};
 }>({
     formTitle: "",
-    project: { id: "", title: "", description: "" },
+    project: { id: "", name: "", description: "" },
     onSave: async () => {},
 });
 
 const headers = [
-    { title: "title", value: "title", align: "end" },
+    { title: "name", value: "name", align: "end" },
     { title: "description", value: "description", align: "end" },
     { title: "Actions", value: "actions", align: "end", sortable: false },
 ];
@@ -88,7 +88,7 @@ async function fetchProjects() {
 
 function openCreateForm() {
     formProps.value.formTitle = "Create New Project";
-    formProps.value.project = { id: "", title: "", description: "" };
+    formProps.value.project = { id: "", name: "", description: "" };
     formProps.value.onSave = cretaeProject;
     dialog.value = true;
 }

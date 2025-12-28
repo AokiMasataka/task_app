@@ -1,12 +1,24 @@
-FROM python:3.12.7-bullseye
+# ===== Build Stage =====
+FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim AS builder
 
 WORKDIR /app
 
-RUN mkdir /app/task_app
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        build-essential pkg-config libssl-dev&& \
+    rm -rf /var/lib/apt/lists/*
 
-COPY ./task_app /app/task_app
-COPY ./requirements.txt /app
+COPY ./pyproject.toml ./uv.lock /app/
+RUN uv sync --no-dev
 
-RUN pip install -r requirements.txt
+# ===== Runtime Stage =====
+FROM python:3.12-slim
 
-CMD ["python", "-m", "task_app"]
+WORKDIR /app
+
+ENV TZ=Asia/Tokyo
+
+COPY --from=builder /app/.venv /app/.venv
+COPY ./app /app
+
+CMD ["/app/.venv/bin/python", "/app/main.py"]

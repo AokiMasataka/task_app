@@ -1,10 +1,10 @@
 <template>
     <v-card :title="props.title">
         <v-card-text>
-            <Title v-model:title="project.title" />
+            <Title v-model:title="project.name" />
             <v-text-field
                 v-model="project.description"
-                label="Project title"
+                label="Project name"
                 variant="solo-filled"
                 placeholder="description"
                 required

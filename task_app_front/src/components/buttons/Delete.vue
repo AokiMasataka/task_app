@@ -15,7 +15,7 @@
     <v-dialog v-model="deleteDialog" max-width="600">
         <DeleteForm
             :title="props.title"
-            @on-delete="$emit('onDelete')"
+            @on-delete="deleteTask"
             @on-close="deleteDialog = false"
         />
     </v-dialog>
@@ -29,5 +29,11 @@ import { ref } from "vue";
 const props = defineProps<{ title: string }>();
 
 const deleteDialog = ref<boolean>(false);
-defineEmits<{ (e: "onDelete"): void }>();
+const emit = defineEmits<{ (e: "onDelete"): void }>();
+
+
+async function deleteTask() {
+    deleteDialog.value = false;
+    emit("onDelete");
+}
 </script>
