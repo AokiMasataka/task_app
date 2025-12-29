@@ -2,8 +2,10 @@ services:
   ta-webui:
     build:
       context: task_app_front
+      dockerfile: Dockerfile
       args:
         VITE_BACKEND_API_BASE_URL: "http://localhost:${BACKEND_PORT}"
+    image: ta-frontend:latest
     container_name: ta-webui
     ports:
       - 80:80
