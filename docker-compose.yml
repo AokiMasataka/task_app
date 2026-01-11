@@ -1,0 +1,44 @@
+services:
+  ea-app-webui:
+    build:
+      context: ea_frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_BACKEND_API_BASE_URL: ${BACKEND_API_BASE_URL}
+    image: ea-app-webui
+    container_name: ea-app-webui
+    ports:
+      - 80:80
+      - 443:443
+
+  ea-app-backend:
+    build:
+      context: ea_backend
+      dockerfile: Dockerfile
+    image: ea-app-backend
+    container_name: ea-app-back
+    depends_on:
+      - ea-postgres
+    ports:
+      - ${BACKEND_PORT}:${BACKEND_PORT}
+    environment:
+      APP_PORT: ${BACKEND_PORT}
+      PGSQL_HOST: ea-postgres
+      PGSQL_PORT: ${PGSQL_PORT}
+      PGSQL_USER: ${PGSQL_USER}
+      PGSQL_PASS: ${PGSQL_PASS}
+      PGSQL_DB: ${PGSQL_DB}
+      CLIENT_ID: ${CLIENT_ID}
+      CLIENT_SECRET: ${CLIENT_SECRET}
+  
+  ea-postgres:
+    image: postgres:17.2-alpine3.21
+    container_name: ea-postgres
+    shm_size: 128mb
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: ${PGSQL_USER}
+      POSTGRES_PASSWORD: ${PGSQL_PASS}
+      POSTGRES_DB: ${PGSQL_DB}
+
