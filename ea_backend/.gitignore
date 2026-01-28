@@ -1,5 +1,0 @@
-.env
-postgresql/db_store/*
-ea_store/db_store/*
-
-ea_backend/target

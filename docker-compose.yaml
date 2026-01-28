@@ -1,26 +1,61 @@
 services:
   ta-webui:
     build:
-      context: task_app_front
+      context: ta_front
       dockerfile: Dockerfile
       args:
-        VITE_BACKEND_API_BASE_URL: ${BACKEND_API_BASE_URL}
+        VITE_BACKEND_API_BASE_URL: "${BACKEND_API_BASE_HOST}:${APP_GATEWAY_PORT}"
     image: ta-frontend:latest
     container_name: ta-webui
     ports:
       - 80:80
       - 443:443
 
-  ta-backend:
+  ta-gateway:
     build:
-      context: task_app_back
+      context: ta_gateway
       dockerfile: Dockerfile
-    image: ta-backend:latest
-    container_name: ta-backend
+    image: ta-gateway:latest
+    container_name: ta-gateway
     ports:
-      - ${BACKEND_PORT}:${BACKEND_PORT}
+      - ${APP_GATEWAY_PORT}:${APP_GATEWAY_PORT}
     environment:
-      APP_PORT: ${BACKEND_PORT}
+      APP_PORT: ${APP_GATEWAY_PORT}
+      USER_AUTH_SERVICE_URL: "http://ta-user-auth:${USER_AUTH_PORT}"
+      PROJECT_SERVICE_URL: "http://ta-project-service:${PROJECT_SERVICE_PORT}"
+    depends_on:
+      - ta-user-auth
+
+  ta-user-auth:
+    build:
+      context: easy_auther/ea_backend
+      dockerfile: Dockerfile
+    image: ta-user-auth:latest
+    container_name: ta-user-auth
+    depends_on:
+      - ta-postgres
+    ports:
+      - ${USER_AUTH_PORT}:${USER_AUTH_PORT}
+    environment:
+      APP_PORT: ${USER_AUTH_PORT}
+      PGSQL_HOST: ta-postgres
+      PGSQL_PORT: ${POSTGRES_PORT}
+      PGSQL_USER: ${POSTGRES_USER}
+      PGSQL_PASS: ${POSTGRES_PASSWORD}
+      PGSQL_DB: ${POSTGRES_DB}
+      CLIENT_ID: ${CLIENT_ID}
+      CLIENT_SECRET: ${CLIENT_SECRET}
+
+  ta-project-service:
+    build:
+      context: ta_project_service
+      dockerfile: Dockerfile
+    image: ta-project-service:latest
+    container_name: ta-project-service
+    ports:
+      - ${PROJECT_SERVICE_PORT}:${PROJECT_SERVICE_PORT}
+    environment:
+      APP_PORT: ${PROJECT_SERVICE_PORT}
       POSTGRES_HOST: ta-postgres
       POSTGRES_PORT: ${POSTGRES_PORT}
       POSTGRES_USER: ${POSTGRES_USER}
