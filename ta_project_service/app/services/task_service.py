@@ -5,7 +5,7 @@ from datetime import datetime
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from infra import Task, task_repository
-from .exceptions import TaskNotFoundError
+from core.exceptions import TaskNotFoundError
 
 from .project_service import _valiedate_clamps
 

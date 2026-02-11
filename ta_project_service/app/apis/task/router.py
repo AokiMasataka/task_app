@@ -4,7 +4,7 @@ from fastapi import APIRouter
 
 from core import get_logger
 from services import task_service
-from ..deps import DBSessionDeps
+from ..deps import DBSessionDep
 from .schemas import (
     CreateTaskRequest,
     CreateTaskResponse,
@@ -16,7 +16,7 @@ from .schemas import (
 
 
 logger = get_logger(__name__)
-task_router = APIRouter(tags=["tasks"])
+task_router = APIRouter(tags=["tasks"], prefix="/api")
 
 
 @task_router.get(
@@ -24,13 +24,13 @@ task_router = APIRouter(tags=["tasks"])
     response_model=ListTasksResponse
 )
 async def list_tasks(
+    db_session: DBSessionDep,
     project_id: str,
     status: int | None = None,
     page: int = 1,
     per_page: int = 10,
     sort_by: str = "updated_at",
     sort_order: str = "desc",
-    db_session=DBSessionDeps
 ) -> ListTasksResponse:
     decoded_project_id = UUID(bytes=base64.urlsafe_b64decode(project_id + "=="))
     
@@ -77,9 +77,9 @@ async def list_tasks(
     response_model=CreateTaskResponse
 )
 async def create_task(
+    db_session: DBSessionDep,
     project_id: str,
     request: CreateTaskRequest,
-    db_session=DBSessionDeps
 ) -> CreateTaskResponse:
     decoded_project_id = UUID(bytes=base64.urlsafe_b64decode(project_id + "=="))
     
@@ -110,9 +110,9 @@ async def create_task(
     response_model=GetTaskResponse
 )
 async def get_task(
+    db_session: DBSessionDep,
     project_id: str,
     task_id: str,
-    db_session=DBSessionDeps
 ) -> GetTaskResponse:
     decoded_project_id = UUID(bytes=base64.urlsafe_b64decode(project_id + "=="))
     decoded_task_id = UUID(bytes=base64.urlsafe_b64decode(task_id + "=="))
@@ -145,10 +145,10 @@ async def get_task(
     response_model=UpdateTaskResponse,
 )
 async def update_task(
+    db_session: DBSessionDep,
     project_id: str,
     task_id: str,
     request: UpdateTaskRequest,
-    db_session=DBSessionDeps
 ) -> UpdateTaskResponse:
     decoded_project_id = UUID(bytes=base64.urlsafe_b64decode(project_id + "=="))
     decoded_task_id = UUID(bytes=base64.urlsafe_b64decode(task_id + "=="))
@@ -175,9 +175,9 @@ async def update_task(
 
 @task_router.delete("/projects/{project_id}/tasks/{task_id}", status_code=204)
 async def delete_task(
+    db_session: DBSessionDep,
     project_id: str,
     task_id: str,
-    db_session=DBSessionDeps
 ) -> None:
     decoded_project_id = UUID(bytes=base64.urlsafe_b64decode(project_id + "=="))
     decoded_task_id = UUID(bytes=base64.urlsafe_b64decode(task_id + "=="))

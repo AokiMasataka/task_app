@@ -14,20 +14,20 @@ from .schemas import (
     UpdateDocumentRequest,
     UpdateDocumentResponse
 )
-from ..deps import DBSessionDeps
+from ..deps import DBSessionDep
 
 logger = get_logger(__name__)
-document_router = APIRouter(tags=["documents"])
+document_router = APIRouter(tags=["documents"], prefix="/api")
 
 
 @document_router.get("/projects/{project_id}/docs", response_model=ListDocumentsResponse)
 async def list_documents(
+    db_session: DBSessionDep,
     project_id: str,
     page: int = 1,
     per_page: int = 10,
     sort_by: Literal["created_at", "updated_at"] = "updated_at",
     sort_order: Literal["asc", "desc"] = "desc",
-    db_session=DBSessionDeps
 ) -> ListDocumentsResponse:
     decoded_project_id = UUID(bytes=base64.urlsafe_b64decode(project_id + "=="))
 
@@ -70,9 +70,9 @@ async def list_documents(
     response_model=CreateDocumentResponse
 )
 async def create_document(
+    db_session: DBSessionDep,
     project_id: str,
     request: CreateDocumentRequest,
-    db_session=DBSessionDeps
 ) -> CreateDocumentResponse:
     decoded_project_id = UUID(bytes=base64.urlsafe_b64decode(project_id + "=="))
 
@@ -94,9 +94,9 @@ async def create_document(
     response_model=GetDocumentResponse
 )
 async def get_document(
+    db_session: DBSessionDep,
     project_id: str,
     document_id: str,
-    db_session=DBSessionDeps
 ) -> GetDocumentResponse:
     decoded_project_id = UUID(bytes=base64.urlsafe_b64decode(project_id + "=="))
     decoded_document_id = UUID(bytes=base64.urlsafe_b64decode(document_id + "=="))
@@ -120,10 +120,10 @@ async def get_document(
     response_model=UpdateDocumentResponse
 )
 async def update_document(
+    db_session: DBSessionDep,
     project_id: str,
     document_id: str,
     request: UpdateDocumentRequest,
-    db_session=DBSessionDeps
 ) -> UpdateDocumentResponse:
     decoded_project_id = UUID(bytes=base64.urlsafe_b64decode(project_id + "=="))
     decoded_document_id = UUID(bytes=base64.urlsafe_b64decode(document_id + "=="))
@@ -147,9 +147,9 @@ async def update_document(
 
 @document_router.delete("/projects/{project_id}/docs/{document_id}", status_code=204)
 async def delete_document(
+    db_session: DBSessionDep,
     project_id: str,
     document_id: str,
-    db_session=DBSessionDeps
 ) -> None:
     decoded_project_id = UUID(bytes=base64.urlsafe_b64decode(project_id + "=="))
     decoded_document_id = UUID(bytes=base64.urlsafe_b64decode(document_id + "=="))

@@ -4,7 +4,7 @@ from typing import Literal
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from infra import Project, project_repository
-from .exceptions import ProjectNotFoundError
+from core.exceptions import ProjectNotFoundError
 
 
 def _valiedate_clamps(

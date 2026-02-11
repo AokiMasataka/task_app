@@ -4,7 +4,7 @@ from typing import Literal
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from infra import Document, document_repository
-from .exceptions import DocumentNotFoundError
+from core.exceptions import DocumentNotFoundError
 from .project_service import _valiedate_clamps
 
 

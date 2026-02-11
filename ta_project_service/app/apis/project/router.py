@@ -6,7 +6,7 @@ from fastapi import APIRouter
 
 from core import get_logger
 from services import project_service
-from ..deps import DBSessionDeps
+from ..deps import DBSessionDep
 from .schemas import (
     CreateProjectRequest,
     CreateProjectResponse,
@@ -20,16 +20,16 @@ from .schemas import (
 
 
 logger = get_logger(__name__)
-project_router = APIRouter(tags=["projects"])
+project_router = APIRouter(tags=["projects"], prefix="/api")
 
 
 @project_router.get("/projects", response_model=ListProjectsResponse)
 async def list_projects(
+    db_session: DBSessionDep,
     page: int = 1,
     per_page: int = 10,
     sort_by: Literal["created_at", "updated_at"] = "updated_at",
     sort_order: Literal["asc", "desc"] = "desc",
-    db_session=DBSessionDeps
 ) -> ListProjectsResponse:
     projects, total = await project_service.list_projects(
         session=db_session,
@@ -61,8 +61,8 @@ async def list_projects(
     response_model=CreateProjectResponse
 )
 async def create_project(
+    db_session: DBSessionDep,
     request: CreateProjectRequest,
-    db_session=DBSessionDeps
 ) -> CreateProjectResponse:
     project_id = await project_service.create_project(
         session=db_session,
@@ -80,8 +80,8 @@ async def create_project(
     response_model=GetProjectResponse
 )
 async def get_project(
+    db_session: DBSessionDep,
     project_id: str,
-    db_session=DBSessionDeps
 ) -> GetProjectResponse:
     project_id = UUID(bytes=base64.urlsafe_b64decode(project_id + "=="))
     project = await project_service.get_project(
@@ -103,9 +103,9 @@ async def get_project(
     response_model=UpdateProjectResponse,
 )
 async def update_project(
+    db_session: DBSessionDep,
     project_id: str,
     request: UpdateProjectRequest,
-    db_session=DBSessionDeps
 ) -> UpdateProjectResponse:
     project_id = UUID(bytes=base64.urlsafe_b64decode(project_id + "=="))
     updated_project = await project_service.update_project(
@@ -123,8 +123,8 @@ async def update_project(
 
 @project_router.delete("/projects/{project_id}", status_code=204)
 async def delete_project(
+    db_session: DBSessionDep,
     project_id: str,
-    db_session=DBSessionDeps
 ) -> None:
     logger.info("deleting project", project_id=str(project_id))
     project_id = UUID(bytes=base64.urlsafe_b64decode(project_id + "=="))

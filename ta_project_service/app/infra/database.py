@@ -1,44 +1,42 @@
-from typing import AsyncGenerator
-
 from sqlalchemy import text
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.pool import NullPool
-from core import config, get_logger
+from sqlalchemy.engine import URL
+from sqlalchemy.ext.asyncio import (
+    AsyncEngine,
+    AsyncSession,
+    async_sessionmaker,
+    create_async_engine,
+)
+
 from .models import Base
+from core import config, get_logger
 
 
 logger = get_logger()
 
-# Create async engine using config
-DATABASE_URL = f"postgresql+asyncpg://{config.postgres_user}:{config.postgres_password}@{config.postgres_host}:{config.postgres_port}/{config.postgres_db}"
 
-_engine = create_async_engine(
-    DATABASE_URL,
-    poolclass=NullPool,
-    echo=False,
-)
+def create_db_engine() -> AsyncEngine:
+    """Create database engine."""
 
-# Create async session factory
-async_session_maker = sessionmaker(_engine, class_=AsyncSession, expire_on_commit=False)
+    db_url = URL.create(
+        drivername="postgresql+asyncpg",
+        username=config.postgres_user,
+        password=config.postgres_password,
+        host=config.postgres_host,
+        port=config.postgres_port,
+        database=config.postgres_db,
+    )
+    return create_async_engine(url=db_url, echo=False)
 
 
-async def init_db():
-    async with _engine.begin() as conn:
+def create_session_maker(engine: AsyncEngine) -> async_sessionmaker[AsyncSession]:
+    """Create session maker."""
+    return async_sessionmaker(engine, expire_on_commit=False)
+
+
+async def init_db(engine: AsyncEngine) -> None:
+    """Initialize database tables."""
+    
+
+    async with engine.begin() as conn:
         await conn.execute(text('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"'))
         await conn.run_sync(Base.metadata.create_all)
-    logger.info("Database initialized")
-
-async def close_db() -> None:
-    global _engine
-    if _engine:
-        await _engine.dispose()
-        _engine = None
-
-
-async def get_db_session() -> AsyncGenerator[AsyncSession, None]:
-    async with async_session_maker() as session:
-        try:
-            yield session
-        finally:
-            await session.close()

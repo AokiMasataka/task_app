@@ -10,5 +10,10 @@ class Config(BaseSettings):
     postgres_password: str
     postgres_db: str
 
+    client_id: str
+    client_secret: str
+
+    ea_auth_url: str
+
 
 config = Config()   # type: ignore
