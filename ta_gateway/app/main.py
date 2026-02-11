@@ -32,7 +32,7 @@ async def lifespan(app: FastAPI):
         # http2=True,   # 可能なら必須
     )
 
-    app.state.jwk = fetch_jwk()
+    # app.state.jwk = fetch_jwk()
 
     yield
 
@@ -43,8 +43,12 @@ app = FastAPI(title="task_app_gateway", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=False,
+    allow_origins=[
+        "http://localhost:80",
+        "http://localhost:443",
+        "http://localhost:3000"
+    ],
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
