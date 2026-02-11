@@ -1,27 +1,72 @@
-import { BACKEND_BASE_URL } from "./const.ts";
+import { BACKEND_BASE_URL } from '@/scripts/const';
 
 
-export async function login(
-    name: string,
-    pass: string
-): Promise<{ token: string }> {
-    const response = await fetch(`${BACKEND_BASE_URL}/login`, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ name, pass }),
-    });
-    return await response.json();
-}
-
-export async function register(
+export async function createAccount(
     name: string,
     email: string,
     pass: string
-): Promise<{ token: string }> {
-    const response = await fetch(`${BACKEND_BASE_URL}/register`, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ name, email, pass }),
-    });
+): Promise<{ id: string }> {
+    const url = new URL("/api/users", BACKEND_BASE_URL).toString();
+
+    const headers = new Headers();
+    headers.append("Content-Type", "application/json");
+    const response = await fetch(
+        url,
+        {
+            method: "POST",
+            headers: headers,
+            body: JSON.stringify({ name: name, email: email, password: pass }),
+        }
+    );
     return await response.json();
+}
+
+
+export async function get_user(user_id: string) {
+    const url = new URL(`/api/users/${user_id}`, BACKEND_BASE_URL).toString();
+    const headers = new Headers();
+    headers.append("Content-Type", "application/json");
+    const response = await fetch(
+        url,
+        {
+            method: "GET",
+            headers: headers,
+        }
+    );
+    return await response.json();
+}
+
+
+export async function get_users() {
+    const url = new URL(`/api/users`, BACKEND_BASE_URL).toString();
+    const headers = new Headers();
+    headers.append("Content-Type", "application/json");
+    const response = await fetch(
+        url,
+        {
+            method: "GET",
+            headers: headers,
+        }
+    );
+    return await response.json();
+}
+
+export async function me(token: string) {
+    const payload = parseJwt(token)
+    const m = await get_user(payload.id);
+    return m;
+}
+
+
+function parseJwt(token: string) {
+  const base64Url = token.split('.')[1];
+  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  const json = decodeURIComponent(
+    atob(base64)
+      .split('')
+      .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+      .join('')
+  );
+
+  return JSON.parse(json);
 }

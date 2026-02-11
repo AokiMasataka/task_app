@@ -1,4 +1,6 @@
 <template>
+    <Header></Header>
+    <Sidebar></Sidebar>
     <div class="mx-8 my-4">
         <div class="flex justify-between">
             <BackBtn @on-back="back" />
@@ -25,6 +27,8 @@
 </template>
 
 <script setup lang="ts">
+import Header from '@/components/Header';
+import Sidebar from '@/components/Sidebar';
 import MarkDown from "@/components/atomic/MarkDown.vue";
 import BackBtn from "@/components/buttons/Back.vue";
 import DeleteBtn from "@/components/buttons/Delete.vue";

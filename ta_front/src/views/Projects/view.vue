@@ -1,4 +1,6 @@
 <template>
+    <Header></Header>
+    <Sidebar></Sidebar>
     <div class="mx-8 my-4">
         <v-btn class="my-4" @click="openCreateForm">New Project</v-btn>
 
@@ -40,6 +42,8 @@
 </template>
 
 <script setup lang="ts">
+import Header from '@/components/Header';
+import Sidebar from '@/components/Sidebar';
 import DeleteForm from "@/components/forms/DeleteForm.vue";
 import Pencil from "@/components/icons/Pencil.vue";
 import Trash from "@/components/icons/Trash.vue";
@@ -53,6 +57,7 @@ import { Project, Projects } from "@/scripts/types";
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import ProjectForm from "./parts/Form.vue";
+
 
 const loading = ref(false);
 const router = useRouter();

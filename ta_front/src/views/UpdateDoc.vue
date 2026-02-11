@@ -1,4 +1,6 @@
 <template>
+    <Header></Header>
+    <Sidebar></Sidebar>
     <div class="mx-8 my-4">
         <div class="flex gap-4 justify-between">
             <v-btn clas="mt-4" @click="back">Back</v-btn>
@@ -26,6 +28,8 @@
 </template>
 
 <script setup lang="ts">
+import Header from '@/components/Header';
+import Sidebar from '@/components/Sidebar';
 import { computed, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Content from "../components/atomic/Content.vue";

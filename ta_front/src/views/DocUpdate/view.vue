@@ -1,4 +1,6 @@
 <template>
+    <Header></Header>
+    <Sidebar></Sidebar>
     <DocForm
         createOrUpdate="UPDATE"
         @on-submit="updateDoc"
@@ -8,6 +10,8 @@
 </template>
 
 <script setup lang="ts">
+import Header from '@/components/Header';
+import Sidebar from '@/components/Sidebar';
 import DocForm from "@/components/forms/DocForm.vue";
 import { fetchDocAPI, updateDocAPI } from "@/scripts/docApi";
 import { Doc } from "@/scripts/types";

@@ -1,4 +1,6 @@
 <template>
+    <Header></Header>
+    <Sidebar></Sidebar>
     <div class="mx-8">
         <h1 class="text-3xl my-4">{{ projectName }}</h1>
         <SwitchTab :project-id="projectId">
@@ -9,6 +11,8 @@
 </template>
 
 <script setup lang="ts">
+import Header from '@/components/Header';
+import Sidebar from '@/components/Sidebar';
 import { fetchProjectAPI } from "@/scripts/projectApi";
 import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
