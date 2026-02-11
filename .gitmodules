@@ -1,3 +1,4 @@
 [submodule "easy_auther"]
 	path = easy_auther
 	url = https://github.com/AokiMasataka/easy_auther.git
+    branch = dev
